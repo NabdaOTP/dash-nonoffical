@@ -319,7 +319,7 @@ export function InstancesPage() {
         <Button
           onClick={() => setShowCreateConfirm(true)}
           disabled={creating}
-          className="gradient-primary text-primary-foreground gap-2 shrink-0"
+          className="gradient-primary text-primary-foreground gap-2 shrink-0 cursor-pointer"
         >
           {creating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
           {t("create")}
@@ -405,7 +405,7 @@ export function InstancesPage() {
                               <Link href={`/${locale}/instances/${inst.id}`}>
                                 <Button
                                   variant="default" size="sm"
-                                  className="bg-blue-500 hover:bg-blue-600 text-white gap-1.5"
+                                  className="bg-blue-500 hover:bg-blue-600 text-white gap-1.5 cursor-pointer"
                                   onClick={(e) => e.stopPropagation()}
                                 >
                                   <Rocket className="h-3.5 w-3.5" />
@@ -423,7 +423,7 @@ export function InstancesPage() {
                                 <DropdownMenuTrigger asChild>
                                   <Button
                                     variant="default" size="sm"
-                                    className="bg-linear-to-r from-[#A78BFA] to-[#7C3AED] hover:from-[#9F7AEA] hover:to-[#6D28D9] text-white gap-1.5"
+                                    className="bg-linear-to-r from-[#A78BFA] to-[#7C3AED] hover:from-[#9F7AEA] hover:to-[#6D28D9] text-white gap-1.5 cursor-pointer"
                                     disabled={!!payingInstanceId}
                                     onClick={(e) => e.stopPropagation()}
                                   >
@@ -486,7 +486,7 @@ export function InstancesPage() {
                                   onOpenChange={(open) => setOpenMenuId(open ? inst.id : null)}
                                 >
                                   <DropdownMenuTrigger asChild>
-                                    <Button variant="ghost" size="icon" className="h-8 w-8" onClick={(e) => e.stopPropagation()}>
+                                    <Button variant="ghost" size="icon" className="h-8 w-8 cursor-pointer" onClick={(e) => e.stopPropagation()}>
                                       {openMenuId === inst.id
                                         ? <PanelTopClose className="h-4 w-4 text-muted-foreground" />
                                         : <PanelTopOpen className="h-4 w-4 text-muted-foreground" />}
@@ -572,10 +572,10 @@ export function InstancesPage() {
             <DialogDescription>{t("createInstanceConfirm")}</DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowCreateConfirm(false)} disabled={creating}>
+            <Button className="cursor-pointer" variant="outline" onClick={() => setShowCreateConfirm(false)} disabled={creating}>
               {tCommon("actions.cancel")}
             </Button>
-            <Button onClick={handleCreate} disabled={creating} className="gradient-primary text-primary-foreground">
+            <Button onClick={handleCreate} disabled={creating} className="gradient-primary text-primary-foreground cursor-pointer">
               {creating && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               {t("actionsConfirm")}
             </Button>
@@ -606,10 +606,10 @@ export function InstancesPage() {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="ghost" onClick={() => setEditingInstance(null)} disabled={saving}>
+            <Button className="cursor-pointer" variant="ghost" onClick={() => setEditingInstance(null)} disabled={saving}>
               {tCommon("actions.cancel")}
             </Button>
-            <Button onClick={handleSaveEdit} disabled={saving || !editName.trim()} className="gradient-primary text-primary-foreground">
+            <Button onClick={handleSaveEdit} disabled={saving || !editName.trim()} className="gradient-primary text-primary-foreground cursor-pointer">
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : tCommon("actions.save")}
             </Button>
           </DialogFooter>
@@ -623,8 +623,8 @@ export function InstancesPage() {
             <DialogDescription>{t("deleteInstanceMsg")}</DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDeleteConfirmId(null)}>{t("deleteInstanceCancel")}</Button>
-            <Button variant="destructive" onClick={async () => { if (deleteConfirmId) await handleDelete(deleteConfirmId); }}>
+            <Button className="cursor-pointer" variant="outline" onClick={() => setDeleteConfirmId(null)}>{t("deleteInstanceCancel")}</Button>
+            <Button className="cursor-pointer" variant="destructive" onClick={async () => { if (deleteConfirmId) await handleDelete(deleteConfirmId); }}>
               {t("deleteInstanceConfirm")}
             </Button>
           </DialogFooter>

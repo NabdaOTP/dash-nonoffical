@@ -65,7 +65,7 @@ export function ContactPage() {
             rel="noopener noreferrer"
             className="block"
           >
-            <Button className="w-full h-12 bg-linear-to-r from-success to-success/90 hover:from-success/90 hover:to-success text-white font-semibold text-base gap-2 transition-all duration-300 group">
+            <Button className="w-full h-12 bg-linear-to-r from-success to-success/90 hover:from-success/90 hover:to-success text-white font-semibold text-base gap-2 transition-all duration-300 group cursor-pointer">
               <MessageCircle className="h-5 w-5" />
               {t("whatsappCTA")}
               <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />

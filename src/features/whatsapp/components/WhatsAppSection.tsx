@@ -389,12 +389,12 @@ export function WhatsAppSection({ instanceId, locale = "en" }: WhatsAppSectionPr
             <div className="flex flex-wrap gap-3">
               {!isConnected && (
                 <>
-                  <Button onClick={handleConnect} disabled={connecting}>
+                  <Button className="cursor-pointer" onClick={handleConnect} disabled={connecting}>
                     {connecting ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
                     {t("connect")}
                   </Button>
 
-                  <Button variant="outline" onClick={handleRefreshQr} disabled={refreshingQr}>
+                  <Button className="cursor-pointer" variant="outline" onClick={handleRefreshQr} disabled={refreshingQr}>
                     {refreshingQr ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
                     {t("refreshQr")}
                   </Button>
@@ -511,12 +511,14 @@ export function WhatsAppSection({ instanceId, locale = "en" }: WhatsAppSectionPr
 
             <div className="flex flex-wrap gap-3">
               <Button
+                className="cursor-pointer"
                 variant="destructive"
                 onClick={() => setShowDisconnectDialog(true)}
               >
                 {t("disconnect")}
               </Button>
               <Button
+                className="cursor-pointer"
                 variant="outline"
                 onClick={async () => {
                   try {
@@ -530,7 +532,7 @@ export function WhatsAppSection({ instanceId, locale = "en" }: WhatsAppSectionPr
               >
                 {t("restart")}
               </Button>
-              <Button variant="ghost" onClick={() => fetchData()}>
+              <Button className="cursor-pointer" variant="ghost" onClick={() => fetchData()}>
                 <RefreshCw className="mr-2 h-4 w-4" />
                 {t("refresh")}
               </Button>
@@ -576,7 +578,7 @@ export function WhatsAppSection({ instanceId, locale = "en" }: WhatsAppSectionPr
                 <Button
                   onClick={handleSendMessage}
                   disabled={sending || !apiKey}
-                  className="w-full bg-linear-to-r from-[#A78BFA] to-[#7C3AED] hover:from-[#9F7AEA] hover:to-[#6D28D9] text-white"
+                  className="w-full cursor-pointer bg-linear-to-r from-[#A78BFA] to-[#7C3AED] hover:from-[#9F7AEA] hover:to-[#6D28D9] text-white"
                 >
                   {sending ? (
                     <>
@@ -607,12 +609,14 @@ export function WhatsAppSection({ instanceId, locale = "en" }: WhatsAppSectionPr
 
           <DialogFooter>
             <Button
+              className="cursor-pointer"
               variant="outline"
               onClick={() => setShowDisconnectDialog(false)}
             >
               {tCommon("actions.cancel")}
             </Button>
             <Button
+              className="cursor-pointer"
               variant="destructive"
               onClick={async () => {
                 setShowDisconnectDialog(false);

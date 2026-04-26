@@ -85,6 +85,7 @@ export function WebhookSection({ webhookUrl, webhookEnabled }: WebhookSectionPro
                         </p>
                     </div>
                     <Switch
+                        className="cursor-pointer"
                         checked={enabled}
                         onCheckedChange={setEnabled}
                         disabled={saving}
@@ -147,7 +148,7 @@ export function WebhookSection({ webhookUrl, webhookEnabled }: WebhookSectionPro
                 <Button
                     onClick={handleSave}
                     disabled={saving}
-                    className="w-full gradient-primary text-primary-foreground"
+                    className="w-full gradient-primary text-primary-foreground cursor-pointer"
                 >
                     {saving ? (
                         <><Loader2 className="h-4 w-4 me-2 animate-spin" />{t("saving")}</>

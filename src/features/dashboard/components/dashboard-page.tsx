@@ -133,7 +133,7 @@ export function DashboardPage() {
           </Link>
         </div>
 
-        {/* ✅ Bundles */}
+        {/* Bundles */}
         <div className="rounded-xl overflow-hidden shadow-sm border border-blue-200 dark:border-blue-900">
           <div style={{ backgroundColor: "#1d4ed8" }} className="p-6 flex items-center justify-between">
             <div>
