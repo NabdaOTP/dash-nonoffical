@@ -442,7 +442,7 @@ export function BundlesPage() {
               {t("deleteDialog.description")}
             </DialogDescription>
           </DialogHeader>
-          <DialogFooter>
+          <DialogFooter className="gap-2 md:gap-0">
             <Button className="cursor-pointer" variant="outline" onClick={() => setConfirmDeleteId(null)}>
               {t("deleteDialog.cancel")}
             </Button>

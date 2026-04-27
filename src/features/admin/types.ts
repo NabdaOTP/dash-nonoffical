@@ -167,7 +167,7 @@ export interface PaginatedResponse<T> {
   };
 }
 
-// ====================== Referral Admin Types ======================
+// Referral Admin Types
 
 export type WithdrawalStatus = "PENDING" | "APPROVED" | "REJECTED";
 
@@ -213,4 +213,20 @@ export interface AdminReferralSettings {
 export interface ReferralBackfillResponse {
   message: string;
   createdCount?: number;
+}
+
+// Bundle Types
+export interface AdminBundle {
+  id: string;
+  name: string;
+  slug: string;
+  ownerId: string;
+  status: string;
+  webhookUrl: string | null;
+  webhookEnabled: boolean;
+  createdAt: string;
+  apiKey?: {
+    prefix: string;
+    revoked: boolean;
+  } | null;
 }
