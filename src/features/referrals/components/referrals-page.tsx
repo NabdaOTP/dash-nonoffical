@@ -116,7 +116,7 @@ export default function ReferralsPage() {
                             readOnly
                             className="font-mono tracking-widest bg-muted"
                         />
-                        <Button variant="outline" size="icon" onClick={handleCopyCode}>
+                        <Button className='cursor-pointer' variant="outline" size="icon" onClick={handleCopyCode}>
                             {copied ? <Check className="h-4 w-4 text-success" /> : <Copy className="h-4 w-4" />}
                         </Button>
                     </div>
@@ -158,7 +158,7 @@ export default function ReferralsPage() {
                     <Button
                         type="submit"
                         disabled={withdrawLoading || !withdrawAmount || !withdrawContact.trim()}
-                        className="gradient-primary text-primary-foreground w-full"
+                        className="gradient-primary text-primary-foreground w-full cursor-pointer"
                     >
                         {withdrawLoading && <Loader2 className="h-4 w-4 animate-spin mr-2" />}
                         {withdrawLoading ? t("referral.submitting") : t("referral.submit")}

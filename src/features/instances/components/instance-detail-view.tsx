@@ -183,7 +183,7 @@ export function InstanceDetailView({ id, locale }: { id: string; locale: string 
         <div className="text-6xl mb-6"><DoorClosedLocked /></div>
         <h2 className="text-3xl font-bold">{t("paymentRequired")}</h2>
         <p className="mt-3 text-muted-foreground">{t("paymentRequiredDesc")}</p>
-        <Button asChild size="lg" className="mt-8">
+        <Button asChild size="lg" className="mt-8 cursor-pointer">
           <Link href={`/${locale}/billing/subscribe?instanceId=${id}`}>{t("payNow")}</Link>
         </Button>
       </div>
@@ -226,20 +226,20 @@ export function InstanceDetailView({ id, locale }: { id: string; locale: string 
 
           <div className="grid grid-cols-2 ms-auto w-fit sm:flex sm:flex-wrap gap-2">
             <a href="https://api.nabdaotp.com/docs" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
-              <Button variant="ghost" size="sm" className="w-full sm:w-auto">
+              <Button variant="ghost" size="sm" className="w-full sm:w-auto cursor-pointer">
                 <BookText className="h-4 w-4 mr-1" />
                 {t("apiDocs")}
               </Button>
             </a>
             <Link href={`/${locale}/instances/${id}/messages`} className="w-full sm:w-auto">
-              <Button variant="ghost" size="sm" className="w-full sm:w-auto">
+              <Button variant="ghost" size="sm" className="w-full sm:w-auto cursor-pointer">
                 <MessageCircle className="h-4 w-4 mr-1" />
                 {t("messages")}
               </Button>
             </Link>
             {/*  Invoices button */}
             <Link href={`/${locale}/instances/${id}/invoices`} className="w-full sm:w-auto">
-              <Button variant="ghost" size="sm" className="w-full sm:w-auto">
+              <Button variant="ghost" size="sm" className="w-full sm:w-auto cursor-pointer">
                 <CreditCard className="h-4 w-4 mr-1" />
                 {t("invoices")}
               </Button>
@@ -248,7 +248,7 @@ export function InstanceDetailView({ id, locale }: { id: string; locale: string 
             <Button
               variant="ghost"
               size="sm"
-              className="w-full sm:w-auto text-destructive"
+              className="w-full sm:w-auto text-destructive cursor-pointer"
               onClick={() => {
                 setPendingAction("logout");
                 setShowConfirmDialog(true);
@@ -262,7 +262,7 @@ export function InstanceDetailView({ id, locale }: { id: string; locale: string 
             <Button
               variant="ghost"
               size="sm"
-              className="w-full sm:w-auto"
+              className="w-full sm:w-auto cursor-pointer"
               onClick={() => {
                 setPendingAction("change");
                 setShowConfirmDialog(true);
@@ -277,7 +277,7 @@ export function InstanceDetailView({ id, locale }: { id: string; locale: string 
             <Button
               variant="ghost"
               size="sm"
-              className="w-full sm:w-auto"
+              className="w-full sm:w-auto cursor-pointer"
               onClick={() => {
                 setPendingAction("restart");
                 setShowConfirmDialog(true);
@@ -335,7 +335,7 @@ export function InstanceDetailView({ id, locale }: { id: string; locale: string 
                       <td className="px-4 py-4">
                         <div className="flex items-center gap-2">
                           <Input readOnly value={apiUrl} className="text-sm font-mono bg-white border border-[#d1d5db] rounded-md px-3 py-1.5 w-full truncate focus:outline-none text-gray-700 cursor-default" />
-                          <Button size="icon" variant="ghost" className="h-8 w-8 shrink-0 text-gray-500 hover:text-gray-700" onClick={() => handleCopy(apiUrl, "apiUrl")}>
+                          <Button size="icon" variant="ghost" className="h-8 w-8 shrink-0 text-gray-500 hover:text-gray-700 cursor-pointer" onClick={() => handleCopy(apiUrl, "apiUrl")}>
                             {copiedField === "apiUrl" ? <Check className="h-4 w-4 text-green-600" /> : <Copy className="h-4 w-4" />}
                           </Button>
                         </div>
@@ -343,7 +343,7 @@ export function InstanceDetailView({ id, locale }: { id: string; locale: string 
                       <td className="px-4 py-4">
                         <div className="flex items-center gap-2">
                           <Input readOnly value={id} className="text-sm font-mono bg-white border border-[#d1d5db] rounded-md px-3 py-1.5 w-full truncate focus:outline-none text-gray-700 cursor-default" />
-                          <Button size="icon" variant="ghost" className="h-8 w-8 shrink-0 text-gray-500 hover:text-gray-700" onClick={() => handleCopy(id, "instanceId")}>
+                          <Button size="icon" variant="ghost" className="h-8 w-8 shrink-0 text-gray-500 hover:text-gray-700 cursor-pointer" onClick={() => handleCopy(id, "instanceId")}>
                             {copiedField === "instanceId" ? <Check className="h-4 w-4 text-green-600" /> : <Copy className="h-4 w-4" />}
                           </Button>
                         </div>
@@ -351,10 +351,10 @@ export function InstanceDetailView({ id, locale }: { id: string; locale: string 
                       <td className="px-4 py-4">
                         <div className="flex items-center gap-2">
                           <Input readOnly value={instance.apiKey} className="text-sm font-mono bg-white border border-[#d1d5db] rounded-md px-3 py-1.5 w-full truncate focus:outline-none text-gray-700 cursor-default" />
-                          <Button size="icon" variant="ghost" className="h-8 w-8 shrink-0 text-gray-500 hover:text-gray-700" onClick={() => handleCopy(tokenValue, "token")}>
+                          <Button size="icon" variant="ghost" className="h-8 w-8 shrink-0 text-gray-500 hover:text-gray-700 cursor-pointer" onClick={() => handleCopy(tokenValue, "token")}>
                             {copiedField === "token" ? <Check className="h-4 w-4 text-green-600" /> : <Copy className="h-4 w-4" />}
                           </Button>
-                          <Button size="icon" variant="ghost" className="h-8 w-8 shrink-0 text-gray-500 hover:text-gray-700" onClick={() => setShowRotateDialog(true)} title="Rotate token">
+                          <Button size="icon" variant="ghost" className="h-8 w-8 shrink-0 text-gray-500 hover:text-gray-700 cursor-pointer" onClick={() => setShowRotateDialog(true)} title="Rotate token">
                             <RefreshCw className="h-4 w-4" />
                           </Button>
                         </div>
@@ -415,6 +415,7 @@ export function InstanceDetailView({ id, locale }: { id: string; locale: string 
 
           <DialogFooter>
             <Button
+              className="cursor-pointer"
               variant="outline"
               onClick={() => setShowConfirmDialog(false)}
               disabled={whatsAppAction !== null}
@@ -422,6 +423,7 @@ export function InstanceDetailView({ id, locale }: { id: string; locale: string 
               {tCommon("actions.cancel")}
             </Button>
             <Button
+              className="cursor-pointer"
               variant={pendingAction === "logout" ? "destructive" : "default"}
               onClick={async () => {
                 if (!pendingAction) return;
@@ -451,8 +453,8 @@ export function InstanceDetailView({ id, locale }: { id: string; locale: string 
           <DialogHeader><DialogTitle>{t("rotateToken")}</DialogTitle></DialogHeader>
           <p className="text-sm text-muted-foreground mt-2">{t("rotateTokenConfirm")}</p>
           <DialogFooter className="mt-4">
-            <Button variant="outline" onClick={() => setShowRotateDialog(false)} disabled={rotatingToken}>{t("cancel")}</Button>
-            <Button className="bg-linear-to-r from-[#A78BFA] to-[#7C3AED] hover:from-[#9F7AEA] hover:to-[#6D28D9] text-white" onClick={handleRotateToken} disabled={rotatingToken}>
+            <Button className="cursor-pointer" variant="outline" onClick={() => setShowRotateDialog(false)} disabled={rotatingToken}>{t("cancel")}</Button>
+            <Button className="bg-linear-to-r cursor-pointer from-[#A78BFA] to-[#7C3AED] hover:from-[#9F7AEA] hover:to-[#6D28D9] text-white" onClick={handleRotateToken} disabled={rotatingToken}>
               {rotatingToken ? <Loader2 className="h-4 w-4 animate-spin" /> : "Rotate Token"}
             </Button>
           </DialogFooter>

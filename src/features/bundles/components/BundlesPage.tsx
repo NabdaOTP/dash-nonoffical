@@ -37,7 +37,7 @@ function formatDate(dateStr: string): string {
   } catch { return "—"; }
 }
 
-// ─── Empty State ──────────────────────────────────────────────────────────────
+// Empty State 
 
 function EmptyState({ onCreateClick }: { onCreateClick: () => void }) {
   const t = useTranslations("bundles");
@@ -103,8 +103,7 @@ function EmptyState({ onCreateClick }: { onCreateClick: () => void }) {
   );
 }
 
-// ─── Suspend Confirmation Dialog ──────────────────────────────────────────────
-
+// Suspend Confirmation Dialog 
 function SuspendConfirmDialog({
   bundle,
   open,
@@ -189,7 +188,7 @@ function SuspendConfirmDialog({
   );
 }
 
-// ─── Main Page ────────────────────────────────────────────────────────────────
+// Main Page 
 
 export function BundlesPage() {
   const [bundles, setBundles] = useState<Bundle[]>([]);
@@ -320,7 +319,7 @@ export function BundlesPage() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
           {bundles.map((bundle) => (
-            <Card key={bundle.id} className="border border-border hover:shadow-md transition-shadow">
+            <Card key={bundle.id} className="border border-border hover:shadow-md transition-shadow cursor-pointer" onClick={() => router.push(`/${locale}/bundles/${bundle.id}`)}>
               <CardContent className="p-5">
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-3 min-w-0 ">
@@ -338,13 +337,13 @@ export function BundlesPage() {
                     </Badge>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="h-8 w-8 cursor-pointer">
+                        <Button variant="ghost" size="icon" className="h-8 w-8 cursor-pointer" onClick={(e) => e.stopPropagation()}>
                           <MoreHorizontal className="h-4 w-4" />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem
-                          onClick={() => handleToggleStatus(bundle)}
+                          onClick={(e) => {e.stopPropagation(); handleToggleStatus(bundle)}}
                           disabled={togglingId === bundle.id}
                         >
                           {togglingId === bundle.id
@@ -356,7 +355,7 @@ export function BundlesPage() {
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           className="text-destructive focus:text-destructive"
-                          onClick={() => setConfirmDeleteId(bundle.id)}
+                          onClick={(e) => {e.stopPropagation(); setConfirmDeleteId(bundle.id)}}
                           disabled={deletingId === bundle.id}
                         >
                           {deletingId === bundle.id
@@ -374,7 +373,7 @@ export function BundlesPage() {
                   <Button
                     variant="default" size="sm"
                     className="bg-blue-500 hover:bg-blue-600 text-white gap-1.5 cursor-pointer"
-                    onClick={() => router.push(`/${locale}/bundles/${bundle.id}`)}
+                    onClick={(e) => { e.stopPropagation(); router.push(`/${locale}/bundles/${bundle.id}`); }}
                   >
                     {t("card.manage")}
                     <Rocket className="h-3.5 w-3.5" />
@@ -386,7 +385,7 @@ export function BundlesPage() {
         </div>
       )}
 
-      {/* ── Create Dialog ─────────────────────────────────────────────────── */}
+      {/* Create Dialog */}
       <Dialog open={showCreate} onOpenChange={setShowCreate}>
         <DialogContent>
           <DialogHeader>
@@ -434,7 +433,7 @@ export function BundlesPage() {
         </DialogContent>
       </Dialog>
 
-      {/* ── Delete Confirm Dialog ──────────────────────────────────────────── */}
+      {/* Delete Confirm Dialog */}
       <Dialog open={!!confirmDeleteId} onOpenChange={() => setConfirmDeleteId(null)}>
         <DialogContent>
           <DialogHeader>
@@ -443,7 +442,7 @@ export function BundlesPage() {
               {t("deleteDialog.description")}
             </DialogDescription>
           </DialogHeader>
-          <DialogFooter>
+          <DialogFooter className="gap-2 md:gap-0">
             <Button className="cursor-pointer" variant="outline" onClick={() => setConfirmDeleteId(null)}>
               {t("deleteDialog.cancel")}
             </Button>
@@ -460,7 +459,7 @@ export function BundlesPage() {
         </DialogContent>
       </Dialog>
 
-      {/* ── Suspend Confirm Dialog ─────────────────────────────────────────── */}
+      {/* Suspend Confirm Dialog */}
       <SuspendConfirmDialog
         bundle={suspendTarget}
         open={!!suspendTarget}

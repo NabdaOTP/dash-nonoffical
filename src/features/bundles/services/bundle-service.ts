@@ -7,7 +7,7 @@ import type {
 
 const userScope = { tokenScope: "user" as const };
 
-// ─── Bundles CRUD ─────────────────────────────────────────────────────────────
+// Bundles CRUD
 
 export async function getMyBundles(): Promise<Bundle[]> {
   const result = await api.get<Bundle[]>("/api/v1/bundles", userScope);
@@ -38,13 +38,13 @@ export async function deleteBundle(id: string): Promise<void> {
   return api.delete<void>(`/api/v1/bundles/${id}`, userScope);
 }
 
-// ─── API Key ──────────────────────────────────────────────────────────────────
+// API Key
 
 export async function rotateBundleApiKey(id: string): Promise<{ apiKey: string }> {
   return api.post<{ apiKey: string }>(`/api/v1/bundles/${id}/api-key/rotate`, {}, userScope);
 }
 
-// ─── Messages ─────────────────────────────────────────────────────────────────
+// Messages
 
 export async function getBundleMessages(
   id: string,
@@ -59,7 +59,7 @@ export async function getBundleMessages(
   );
 }
 
-// ─── Slots ────────────────────────────────────────────────────────────────────
+// Slots 
 
 export async function getBundleSlots(id: string): Promise<BundleSlot[]> {
   const result = await api.get<BundleSlot[]>(`/api/v1/bundles/${id}/slots`, userScope);
