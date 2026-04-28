@@ -208,7 +208,7 @@ export function BillingPage() {
                     </TableCell>
                     <TableCell className="text-end">
                       <div className="flex items-center justify-end gap-3">
-                        {/* ✅ Download PDF */}
+                        {/* download PDF */}
                         {getInvoicePdf(inv) && (
                           <a
                             href={getInvoicePdf(inv)}
@@ -220,7 +220,7 @@ export function BillingPage() {
                             {t("invoices.download")}
                           </a>
                         )}
-                        {/* ✅ View on Stripe */}
+                        {/* view on stripe */}
                         {inv.hostedInvoiceUrl && (
                           <a
                             href={inv.hostedInvoiceUrl}

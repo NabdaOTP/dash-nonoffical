@@ -212,7 +212,7 @@ export default function AdminPlansPage() {
                 </div>
             )}
 
-            {/* Create / Edit Dialog */}
+            {/* create / edit dialog */}
             <Dialog open={mode === "create" || mode === "edit"} onOpenChange={() => setMode(null)}>
                 <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
                     <DialogHeader>
@@ -297,7 +297,7 @@ export default function AdminPlansPage() {
                 </DialogContent>
             </Dialog>
 
-            {/* Delete Confirm */}
+            {/* delete confirm */}
             <Dialog open={mode === "delete"} onOpenChange={() => setMode(null)}>
                 <DialogContent>
                     <DialogHeader>

@@ -105,7 +105,7 @@ export function WhatsAppSection({ instanceId, locale = "en" }: WhatsAppSectionPr
   const tCommon = useTranslations("common");
   const [showDisconnectDialog, setShowDisconnectDialog] = useState(false);
 
-  
+
   const applyQr = useCallback(async (qrString: string | null) => {
     if (!qrString) { setQr(null); return; }
     try {
@@ -374,18 +374,6 @@ export function WhatsAppSection({ instanceId, locale = "en" }: WhatsAppSectionPr
               </ol>
             )}
 
-            {/* <div className="flex flex-wrap gap-3">
-            <Button onClick={handleConnect} disabled={isConnected || connecting}>
-              {connecting ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
-              {t("connect")}
-            </Button>
-            {!isConnected && (
-              <Button variant="outline" onClick={handleRefreshQr} disabled={refreshingQr}>
-                {refreshingQr ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
-                {t("refreshQr")}
-              </Button>
-            )}
-          </div> */}
             <div className="flex flex-wrap gap-3">
               {!isConnected && (
                 <>
@@ -403,91 +391,6 @@ export function WhatsAppSection({ instanceId, locale = "en" }: WhatsAppSectionPr
             </div>
           </CardContent>
         </Card>
-
-        {/* <Card>
-          <CardHeader>
-            <div className="flex items-center gap-3">
-              <h3 className="text-xl font-semibold">{t("connectionStatus")}</h3>
-              <Badge
-                variant={isConnected ? "default" : "secondary"}
-                className="text-sm px-3 py-1"
-              >
-                {isConnected
-                  ? t("connected")
-                  : t("disconnected")
-                }
-              </Badge>
-            </div>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            {displayPhone && (
-              <p className="text-sm">
-                <strong>{t("phone")}</strong> {displayPhone}
-              </p>
-            )}
-
-            <div className="flex flex-wrap gap-3">
-              <Button
-                variant="destructive"
-                onClick={() => setShowDisconnectDialog(true)}
-              // disabled={whatsAppAction === "disconnect"}
-              >
-                {t("disconnect")}
-              </Button>
-              <Button
-                variant="outline"
-                onClick={async () => {
-                  try {
-                    await restart();
-                    toast.success("Restart requested");
-                    await fetchData();
-                  } catch (e) {
-                    toast.error((e as { message?: string })?.message ?? "Failed to restart");
-                  }
-                }}
-              >
-                {t("restart")}
-              </Button>
-              <Button variant="ghost" onClick={() => fetchData()}>
-                <RefreshCw className="mr-2 h-4 w-4" />
-                {t("refresh")}
-              </Button>
-            </div>
-
-            <div className="border-t pt-6 space-y-4">
-              <h4 className="font-medium">{t("sendMessage")}</h4>
-              <div className="space-y-2">
-                <Label htmlFor="send-phone">{t("phoneNumber")}</Label>
-                <Input
-                  id="send-phone"
-                  placeholder="+1234567890"
-                  value={sendPhone}
-                  onChange={(e) => setSendPhone(e.target.value)}
-                  disabled={sending}
-                  className="font-mono"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="send-message">{t("message")}</Label>
-                <Textarea
-                  id="send-message" placeholder={t("textArea")}
-                  value={sendText} onChange={(e) => setSendText(e.target.value)}
-                  disabled={sending} rows={3} className="resize-none"
-                />
-              </div>
-              <Button
-                onClick={handleSendMessage} disabled={sending || !apiKey}
-                className="w-full bg-linear-to-r from-[#A78BFA] to-[#7C3AED] hover:from-[#9F7AEA] hover:to-[#6D28D9] text-white"
-              >
-                {sending ? (
-                  <><Loader2 className="h-4 w-4 mr-2 animate-spin" />{t("sending")}</>
-                ) : (
-                  <><Send className="h-4 w-4 mr-2" />{t("send")}</>
-                )}
-              </Button>
-            </div>
-          </CardContent>
-        </Card> */}
 
         <Card>
           <CardHeader>
@@ -570,9 +473,8 @@ export function WhatsAppSection({ instanceId, locale = "en" }: WhatsAppSectionPr
                   />
                 </div>
 
-
                 {/* Media Attachment Section */}
-                
+
 
                 {/* Send Button */}
                 <Button

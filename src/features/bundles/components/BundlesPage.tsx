@@ -26,7 +26,7 @@ import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 
 const statusStyles: Record<string, string> = {
-  ACTIVE:    "bg-green-100 text-green-700 border-green-200",
+  ACTIVE: "bg-green-100 text-green-700 border-green-200",
   SUSPENDED: "bg-red-100 text-red-700 border-red-200",
 };
 
@@ -260,7 +260,7 @@ export function BundlesPage() {
   };
 
   /**
-   * Called from the dropdown.
+   * called from the dropdown.
    * - If bundle is SUSPENDED → activate immediately (low risk, no confirm needed).
    * - If bundle is ACTIVE → show the suspend confirmation dialog first.
    */
@@ -343,19 +343,19 @@ export function BundlesPage() {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem
-                          onClick={(e) => {e.stopPropagation(); handleToggleStatus(bundle)}}
+                          onClick={(e) => { e.stopPropagation(); handleToggleStatus(bundle) }}
                           disabled={togglingId === bundle.id}
                         >
                           {togglingId === bundle.id
                             ? <Loader2 className="h-4 w-4 me-2 animate-spin" />
                             : bundle.status === "ACTIVE"
-                            ? <PauseCircle className="h-4 w-4 me-2 text-yellow-600" />
-                            : <PlayCircle className="h-4 w-4 me-2 text-green-600" />}
+                              ? <PauseCircle className="h-4 w-4 me-2 text-yellow-600" />
+                              : <PlayCircle className="h-4 w-4 me-2 text-green-600" />}
                           {bundle.status === "ACTIVE" ? t("actions.suspend") : t("actions.activate")}
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           className="text-destructive focus:text-destructive"
-                          onClick={(e) => {e.stopPropagation(); setConfirmDeleteId(bundle.id)}}
+                          onClick={(e) => { e.stopPropagation(); setConfirmDeleteId(bundle.id) }}
                           disabled={deletingId === bundle.id}
                         >
                           {deletingId === bundle.id
@@ -447,7 +447,7 @@ export function BundlesPage() {
               {t("deleteDialog.cancel")}
             </Button>
             <Button
-            className="cursor-pointer"
+              className="cursor-pointer"
               variant="destructive"
               onClick={() => confirmDeleteId && handleDelete(confirmDeleteId)}
               disabled={!!deletingId}

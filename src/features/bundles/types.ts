@@ -1,5 +1,5 @@
 
-// ─── Bundle 
+// Bundle 
 export interface Bundle {
   id: string;
   name: string;
@@ -29,7 +29,7 @@ export interface BundleCreateResponse extends Bundle {
   apiKey: string;
 }
 
-// ─── Slot 
+// Slot 
 export interface BundleSlot {
   id: string;
   name: string;
@@ -54,7 +54,7 @@ export interface BundleSlotSession {
   lastConnectedAt: string | null;
 }
 
-// ─── Messages 
+// Messages 
 
 export interface BundleMessage {
   id: string;
@@ -74,7 +74,7 @@ export interface BundleMessagesResponse {
   };
 }
 
-// ─── Forms
+// Forms
 
 export interface CreateBundleRequest {
   name: string;

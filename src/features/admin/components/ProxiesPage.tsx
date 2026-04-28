@@ -182,50 +182,7 @@ export default function AdminProxiesPage() {
                     })}
                 </div>
             )}
-            {/* Stats Cards */}
-            {/* {proxies.length > 0 && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
-                    {proxies.map((proxy) => {
-                        const stat = stats.find((s) => s.id === proxy.id);
-                        const activeSessions = stat?.activeSessions || 0;
-                        const maxSessions = stat?.maxSessions || proxy.maxSessions || 100000; // fallback
-                        const pct = maxSessions > 0 ? Math.round((activeSessions / maxSessions) * 100) : 0;
-
-                        const color = pct > 85 ? "text-red-600" : pct > 60 ? "text-yellow-600" : "text-green-600";
-
-                        return (
-                            <div key={proxy.id} className="bg-card rounded-xl border border-border p-5 space-y-4">
-                                <div className="flex items-center justify-between">
-                                    <div className="flex items-center gap-2.5">
-                                        <Server className="h-5 w-5 text-muted-foreground" />
-                                        <div>
-                                            <p className="font-medium text-sm">{proxy.host}:{proxy.port}</p>
-                                            <p className="text-xs text-muted-foreground">Proxy</p>
-                                        </div>
-                                    </div>
-                                    <Badge variant="outline" className={proxy.isActive
-                                        ? "bg-green-100 text-green-700 border-green-200"
-                                        : "bg-red-100 text-red-700 border-red-200"}>
-                                        {proxy.isActive ? "Active" : "Inactive"}
-                                    </Badge>
-                                </div>
-
-                                <div className="space-y-2">
-                                    <div className="flex justify-between text-sm">
-                                        <span className="text-muted-foreground">Sessions</span>
-                                        <span className={`font-semibold ${color}`}>
-                                            {activeSessions.toLocaleString()} / {maxSessions.toLocaleString()}
-                                        </span>
-                                    </div>
-                                    <Progress value={pct} className="h-2.5" />
-                                    <p className="text-right text-xs text-muted-foreground">{pct}% capacity</p>
-                                </div>
-                            </div>
-                        );
-                    })}
-                </div>
-            )} */}
-
+            
             {/* Table */}
             {loading ? (
                 <div className="flex items-center justify-center py-20">

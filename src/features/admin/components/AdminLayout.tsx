@@ -156,10 +156,6 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
             >
               <Menu className="h-5 w-5" />
             </Button>
-            {/* <div className="flex items-center gap-2">
-              <span className="text-red-600 font-semibold text-xl ">Admin</span>
-              <span className="font-bold text-xl">Panel</span>
-            </div> */}
             <Link href="/dashboard">
               <Button variant="outline" size="sm" className="gap-2">
                 <LayoutDashboard className="h-4 w-4" />

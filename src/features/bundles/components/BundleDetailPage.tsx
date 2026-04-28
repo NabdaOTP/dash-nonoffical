@@ -33,14 +33,14 @@ import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 
 const slotStatusStyles: Record<string, string> = {
-  ACTIVE:          "bg-green-100 text-green-700 border-green-200",
+  ACTIVE: "bg-green-100 text-green-700 border-green-200",
   PAYMENT_PENDING: "bg-yellow-100 text-yellow-700 border-yellow-200",
-  SUSPENDED:       "bg-red-100 text-red-700 border-red-200",
+  SUSPENDED: "bg-red-100 text-red-700 border-red-200",
 };
 
 const sessionStatusStyles: Record<string, string> = {
-  CONNECTED:    "bg-green-100 text-green-700 border-green-200",
-  CONNECTING:   "bg-blue-100 text-blue-700 border-blue-200",
+  CONNECTED: "bg-green-100 text-green-700 border-green-200",
+  CONNECTING: "bg-blue-100 text-blue-700 border-blue-200",
   RECONNECTING: "bg-yellow-100 text-yellow-700 border-yellow-200",
   DISCONNECTED: "bg-gray-100 text-gray-600 border-gray-200",
 };
@@ -131,7 +131,7 @@ export function BundleDetailPage({ bundleId }: { bundleId: string }) {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  // ✅ Add new slot بـ interval
+  // Add new slot  interval
   const handlePurchaseSlot = async (interval: "MONTHLY" | "YEARLY") => {
     setOpenAddSlotMenu(false);
     setPurchasing(true);
@@ -144,7 +144,7 @@ export function BundleDetailPage({ bundleId }: { bundleId: string }) {
     }
   };
 
-  // ✅ Repurchase existing slot بـ interval
+  // Repurchase existing slot  interval
   const handleRepurchaseSlot = async (slotId: string, interval: "MONTHLY" | "YEARLY") => {
     setOpenPayMenuId(null);
     setPayingSlotId(slotId);
@@ -183,7 +183,6 @@ export function BundleDetailPage({ bundleId }: { bundleId: string }) {
     return <div className="text-center py-20 text-muted-foreground">{t("detail.notFound")}</div>;
   }
 
-  // ✅ API key بيرجع كـ string مباشرة دلوقتي
   const displayApiKey = newApiKey ?? (typeof bundle.apiKey === "string" ? bundle.apiKey : null);
 
   return (
@@ -212,7 +211,7 @@ export function BundleDetailPage({ bundleId }: { bundleId: string }) {
         </div>
       </div>
 
-      {/* ─── Slots ─────────────────────────────────────────────────── */}
+      {/* Slots */}
       <Card className="border border-border">
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
@@ -225,7 +224,7 @@ export function BundleDetailPage({ bundleId }: { bundleId: string }) {
               <CardDescription className="text-xs mt-1">{t("detail.slots.description")}</CardDescription>
             </div>
 
-            {/* ✅ Add Slot dropdown — monthly/yearly */}
+            {/* Add Slot dropdown — monthly/yearly */}
             <DropdownMenu open={openAddSlotMenu} onOpenChange={setOpenAddSlotMenu}>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -329,7 +328,7 @@ export function BundleDetailPage({ bundleId }: { bundleId: string }) {
                             </Button>
                           )}
 
-                          {/* ✅ Pay dropdown — PAYMENT_PENDING only */}
+                          {/* Pay dropdown — PAYMENT_PENDING only */}
                           {isPending && (
                             <DropdownMenu
                               open={openPayMenuId === slot.id}
@@ -401,7 +400,7 @@ export function BundleDetailPage({ bundleId }: { bundleId: string }) {
         </CardContent>
       </Card>
 
-      {/* ─── API Key ───────────────────────────────────────────────── */}
+      {/* API Key */}
       <Card className="border border-border">
         <CardHeader className="pb-3">
           <div className="flex items-center gap-2">
@@ -412,7 +411,7 @@ export function BundleDetailPage({ bundleId }: { bundleId: string }) {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center gap-2">
-            {/* ✅ API key كامل بدون bullets */}
+            {/* API Key */}
             <div className="flex-1 bg-muted rounded-lg px-4 py-2.5 font-mono text-sm break-all">
               {newApiKey ?? (typeof bundle.apiKey === "string" ? bundle.apiKey : "—")}
             </div>
@@ -424,11 +423,6 @@ export function BundleDetailPage({ bundleId }: { bundleId: string }) {
               {copied ? <Check className="h-4 w-4 text-green-600" /> : <Copy className="h-4 w-4" />}
             </Button>
           </div>
-          {/* {newApiKey && (
-            <p className="text-xs text-yellow-600 bg-yellow-50 border border-yellow-200 rounded-lg px-3 py-2">
-              ⚠️ {t("detail.apiKey.newKeyWarning")}
-            </p>
-          )} */}
           <Button
             variant="outline" size="sm"
             onClick={() => setShowRotateConfirm(true)}
@@ -441,7 +435,7 @@ export function BundleDetailPage({ bundleId }: { bundleId: string }) {
         </CardContent>
       </Card>
 
-      {/* ─── Webhook ───────────────────────────────────────────────── */}
+      {/* Webhook */}
       <Card className="border border-border">
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">

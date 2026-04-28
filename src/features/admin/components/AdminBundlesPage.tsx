@@ -1,5 +1,5 @@
 "use client";
- 
+
 import { useCallback, useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -24,7 +24,7 @@ import { AdminBundle } from "@/features/admin/types";
 import { deleteAdminBundle, getAdminBundles, getAdminBundleSlots, rotateAdminBundleApiKey, updateAdminBundleStatus } from "@/features/admin/services/admin-service";
 import { useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
- 
+
 const adminScope = { tokenScope: "user" as const };
 
 
@@ -34,25 +34,25 @@ function formatDate(d: string) {
     return `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, "0")}-${String(dt.getDate()).padStart(2, "0")}`;
   } catch { return "—"; }
 }
- 
+
 const statusStyles: Record<string, string> = {
-  ACTIVE:    "bg-green-100 text-green-700 border-green-200",
+  ACTIVE: "bg-green-100 text-green-700 border-green-200",
   SUSPENDED: "bg-red-100 text-red-700 border-red-200",
 };
- 
+
 const slotStatusStyles: Record<string, string> = {
-  ACTIVE:          "bg-green-100 text-green-700 border-green-200",
+  ACTIVE: "bg-green-100 text-green-700 border-green-200",
   PAYMENT_PENDING: "bg-yellow-100 text-yellow-700 border-yellow-200",
-  SUSPENDED:       "bg-red-100 text-red-700 border-red-200",
+  SUSPENDED: "bg-red-100 text-red-700 border-red-200",
 };
- 
+
 type ConfirmAction =
   | { type: "delete"; bundle: AdminBundle }
   | { type: "suspend"; bundle: AdminBundle }
   | { type: "activate"; bundle: AdminBundle }
   | { type: "rotate"; bundle: AdminBundle }
   | { type: "deleteSlot"; bundleId: string; slot: BundleSlot };
- 
+
 // Component 
 export default function AdminBundlesPage() {
   const [bundles, setBundles] = useState<AdminBundle[]>([]);
@@ -61,13 +61,13 @@ export default function AdminBundlesPage() {
   const [confirm, setConfirm] = useState<ConfirmAction | null>(null);
   const [actionLoading, setActionLoading] = useState(false);
   const router = useRouter();
-const locale = useLocale();
- 
+  const locale = useLocale();
+
   // Slots dialog
   const [slotsBundle, setSlotsBundle] = useState<AdminBundle | null>(null);
   const [slots, setSlots] = useState<BundleSlot[]>([]);
   const [loadingSlots, setLoadingSlots] = useState(false);
- 
+
   const fetchBundles = useCallback(async () => {
     setLoading(true);
     try {
@@ -79,9 +79,9 @@ const locale = useLocale();
       setLoading(false);
     }
   }, []);
- 
+
   useEffect(() => { fetchBundles(); }, [fetchBundles]);
- 
+
   const handleOpenSlots = async (bundle: AdminBundle) => {
     setSlotsBundle(bundle);
     setLoadingSlots(true);
@@ -94,7 +94,7 @@ const locale = useLocale();
       setLoadingSlots(false);
     }
   };
- 
+
   const handleConfirm = async () => {
     if (!confirm) return;
     setActionLoading(true);
@@ -126,22 +126,22 @@ const locale = useLocale();
       setActionLoading(false);
     }
   };
- 
+
   const filtered = bundles.filter((b) =>
     b.name.toLowerCase().includes(search.toLowerCase()) ||
     b.ownerId.toLowerCase().includes(search.toLowerCase()) ||
     b.slug.toLowerCase().includes(search.toLowerCase())
   );
- 
+
   // Confirm dialog content
   const confirmMeta = confirm ? {
-    delete:      { title: "Delete Bundle",         desc: `Delete "${confirm.type === "deleteSlot" ? confirm.slot.name : (confirm as {bundle: AdminBundle}).bundle?.name}"? This action cannot be undone.`, variant: "destructive" as const, label: "Delete" },
-    suspend:     { title: "Suspend Bundle",         desc: `Suspend "${(confirm as {bundle: AdminBundle}).bundle?.name}"? All outgoing messages will stop immediately.`, variant: "destructive" as const, label: "Suspend" },
-    activate:    { title: "Activate Bundle",        desc: `Activate "${(confirm as {bundle: AdminBundle}).bundle?.name}"?`, variant: "default" as const, label: "Activate" },
-    rotate:      { title: "Rotate API Key",         desc: `Rotate the API key for "${(confirm as {bundle: AdminBundle}).bundle?.name}"? The old key will stop working immediately.`, variant: "destructive" as const, label: "Yes, Rotate" },
-    deleteSlot:  { title: "Delete Slot",            desc: `Delete slot "${confirm.type === "deleteSlot" ? confirm.slot.name : ""}"?`, variant: "destructive" as const, label: "Delete Slot" },
+    delete: { title: "Delete Bundle", desc: `Delete "${confirm.type === "deleteSlot" ? confirm.slot.name : (confirm as { bundle: AdminBundle }).bundle?.name}"? This action cannot be undone.`, variant: "destructive" as const, label: "Delete" },
+    suspend: { title: "Suspend Bundle", desc: `Suspend "${(confirm as { bundle: AdminBundle }).bundle?.name}"? All outgoing messages will stop immediately.`, variant: "destructive" as const, label: "Suspend" },
+    activate: { title: "Activate Bundle", desc: `Activate "${(confirm as { bundle: AdminBundle }).bundle?.name}"?`, variant: "default" as const, label: "Activate" },
+    rotate: { title: "Rotate API Key", desc: `Rotate the API key for "${(confirm as { bundle: AdminBundle }).bundle?.name}"? The old key will stop working immediately.`, variant: "destructive" as const, label: "Yes, Rotate" },
+    deleteSlot: { title: "Delete Slot", desc: `Delete slot "${confirm.type === "deleteSlot" ? confirm.slot.name : ""}"?`, variant: "destructive" as const, label: "Delete Slot" },
   }[confirm.type] : null;
- 
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -149,7 +149,7 @@ const locale = useLocale();
         <h1 className="text-2xl font-bold text-foreground">Bundles</h1>
         <p className="text-sm text-muted-foreground mt-1">{bundles.length} total bundles</p>
       </div>
- 
+
       {/* Search */}
       <div className="relative max-w-sm">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -160,7 +160,7 @@ const locale = useLocale();
           className="ps-9 bg-card"
         />
       </div>
- 
+
       {/* Table */}
       {loading ? (
         <div className="flex items-center justify-center py-20">
@@ -286,7 +286,7 @@ const locale = useLocale();
           </div>
         </div>
       )}
- 
+
       {/* Slots Dialog */}
       <Dialog open={!!slotsBundle} onOpenChange={() => setSlotsBundle(null)}>
         <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
@@ -345,7 +345,7 @@ const locale = useLocale();
           )}
         </DialogContent>
       </Dialog>
- 
+
       {/* Confirm Dialog */}
       {confirm && confirmMeta && (
         <Dialog open={!!confirm} onOpenChange={() => setConfirm(null)}>

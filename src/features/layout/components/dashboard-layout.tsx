@@ -46,7 +46,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
   }, [isLoading, isAuthenticated, router]);
 
 
-  // ====================== Page Visibility Fix ======================
+  // Page Visibility Fix 
   // This solves the "tab freezing / inactivity" issue
   const handlePageBecomeVisible = useCallback(() => {
     if (document.visibilityState === "visible") {
