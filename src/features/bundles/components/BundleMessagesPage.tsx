@@ -125,7 +125,7 @@ export default function BundleMessagesPage({
                       variant="outline"
                       className={`text-xs ${statusColors[m.status] ?? "bg-muted text-muted-foreground"}`}
                     >
-                      {m.status.toUpperCase()}
+                      {t(`messagesPage.tabs.${m.status}`)}
                     </Badge>
                   </TableCell>
                   <TableCell className="text-xs max-w-xs truncate">{m.message}</TableCell>

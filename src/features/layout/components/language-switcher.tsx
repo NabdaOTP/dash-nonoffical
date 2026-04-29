@@ -23,7 +23,7 @@ export function LanguageSwitcher() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-foreground">
+        <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-foreground cursor-pointer">
           <Globe className="h-4 w-4" />
           <span className="text-sm font-medium">{locale === "en" ? "EN" : "AR"}</span>
         </Button>

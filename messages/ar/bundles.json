@@ -59,6 +59,13 @@
   },
   "detail": {
     "notFound": "الحزمة غير موجودة",
+    "messagesButton": "الرسائل",
+    "rotateDialog": {
+      "title": "تدوير مفتاح API",
+      "description": "سيؤدي هذا إلى إلغاء مفتاح API الحالي فوراً. ستتوقف أي تكاملات قائمة تستخدم المفتاح القديم عن العمل. تأكد من تحديث الكود باستخدام المفتاح الجديد.",
+      "cancel": "إلغاء",
+      "confirm": "نعم، دوّر المفتاح"
+    },
     "slots": {
       "title": "المسارات",
       "description": "كل مسار هو رقم واتساب في هذه الحزمة",
@@ -66,6 +73,14 @@
       "redirecting": "جارٍ التحويل…",
       "empty": "لا توجد مسارات بعد — أضف رقم واتساب الأول",
       "noSession": "لا توجد جلسة",
+      "choosePlan": "اختر خطة",
+      "monthly": "شهري",
+      "monthlyPrice": "\u200E$15 / شهر",
+      "annual": "سنوي",
+      "annualPrice": "\u200E$165 / سنة — شهر مجاني",
+      "pay": "ادفع",
+      "manageInstance": "إدارة",
+      "manageSubscription": "إدارة الاشتراك",
       "table": {
         "index": "#",
         "name": "الاسم",
@@ -100,6 +115,33 @@
       "saveButton": "حفظ إعدادات Webhook"
     }
   },
+  "messagesPage": {
+    "title": "الرسائل",
+    "tabs": {
+      "all": "الكل",
+      "queued": "في الانتظار",
+      "sent": "مُرسَل",
+      "invalid": "غير صالح"
+    },
+    "table": {
+      "index": "#",
+      "to": "إلى",
+      "status": "الحالة",
+      "body": "المحتوى",
+      "createdAt": "تاريخ الإنشاء"
+    },
+    "empty": "لا توجد رسائل لهذا الفلتر.",
+    "pagination": {
+      "info": "صفحة {page} من {totalPages} • {total} رسالة",
+      "previous": "السابق",
+      "next": "التالي"
+    },
+    "breadcrumb": {
+      "home": "الرئيسية",
+      "bundles": "الحزم",
+      "messages": "الرسائل"
+    }
+  },
   "toast": {
     "loadError": "فشل تحميل الحزم",
     "loadDetailError": "فشل تحميل تفاصيل الحزمة",
@@ -118,7 +160,9 @@
     "apiKeyRotateError": "فشل تدوير مفتاح API",
     "purchaseError": "فشل شراء المسار",
     "slotDeleted": "تم حذف المسار",
-    "slotDeleteError": "فشل حذف المسار"
+    "slotDeleteError": "فشل حذف المسار",
+    "noPortalUrl": "لم يتم إرجاع رابط البوابة",
+    "manageSubscriptionError": "فشل فتح بوابة الاشتراك"
   },
 "suspendDialog": {
   "title": "تعليق الـ bundle؟",

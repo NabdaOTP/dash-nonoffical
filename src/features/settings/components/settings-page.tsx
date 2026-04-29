@@ -237,7 +237,7 @@ export function SettingsPage() {
                 <Label>{t("profile.phone")}</Label>
                 <Input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} disabled={profileSaving} />
               </div>
-              <Button type="submit" disabled={profileSaving} className="gradient-primary text-primary-foreground">
+              <Button type="submit" disabled={profileSaving} className="gradient-primary text-primary-foreground cursor-pointer">
                 {profileSaving && <Loader2 className="h-4 w-4 animate-spin mr-2" />}
                 {profileSaving ? t("profile.saving") : t("profile.save")}
               </Button>
@@ -274,7 +274,7 @@ export function SettingsPage() {
                 <Label>{t("password.confirm")}</Label>
                 <Input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} minLength={8} disabled={passwordSaving} required />
               </div>
-              <Button type="submit" disabled={passwordSaving} className="gradient-primary text-primary-foreground">
+              <Button type="submit" disabled={passwordSaving} className="gradient-primary text-primary-foreground cursor-pointer">
                 {passwordSaving && <Loader2 className="h-4 w-4 animate-spin mr-2" />}
                 {passwordSaving ? t("password.saving") : t("password.save")}
               </Button>
@@ -310,18 +310,18 @@ export function SettingsPage() {
                   <Label>{t("twoFactor.code")}</Label>
                   <Input value={twoFaCode} onChange={(e) => setTwoFaCode(e.target.value)} maxLength={6} className="text-center tracking-widest font-mono" disabled={twoFaLoading} />
                 </div>
-                <Button onClick={handleConfirm2fa} disabled={twoFaLoading || twoFaCode.length < 6} className="gradient-primary text-primary-foreground">
+                <Button onClick={handleConfirm2fa} disabled={twoFaLoading || twoFaCode.length < 6} className="gradient-primary text-primary-foreground cursor-pointer">
                   {twoFaLoading && <Loader2 className="h-4 w-4 animate-spin mr-2" />}
                   {twoFaLoading ? t("twoFactor.confirming") : t("twoFactor.confirm")}
                 </Button>
               </div>
             ) : user?.twoFactorEnabled ? (
-              <Button variant="outline" onClick={handleDisable2fa} disabled={twoFaLoading} className="text-destructive border-destructive/20">
+              <Button variant="outline" onClick={handleDisable2fa} disabled={twoFaLoading} className="text-destructive border-destructive/20 cursor-pointer">
                 {twoFaLoading && <Loader2 className="h-4 w-4 animate-spin mr-2" />}
                 {t("twoFactor.disable")}
               </Button>
             ) : (
-              <Button onClick={handleEnable2fa} disabled={twoFaLoading} className="gradient-primary text-primary-foreground">
+              <Button onClick={handleEnable2fa} disabled={twoFaLoading} className="gradient-primary text-primary-foreground cursor-pointer">
                 {twoFaLoading && <Loader2 className="h-4 w-4 animate-spin mr-2" />}
                 {t("twoFactor.enable")}
               </Button>
@@ -354,7 +354,7 @@ export function SettingsPage() {
                       readOnly
                       className="font-mono tracking-widest bg-muted"
                     />
-                    <Button variant="outline" size="icon" onClick={handleCopyCode}>
+                    <Button variant="outline" size="icon" onClick={handleCopyCode} className="cursor-pointer">
                       {copied ? <Check className="h-4 w-4 text-success" /> : <Copy className="h-4 w-4" />}
                     </Button>
                   </div>
@@ -392,7 +392,7 @@ export function SettingsPage() {
                       disabled={withdrawLoading}
                     />
                   </div>
-                  <Button type="submit" disabled={withdrawLoading || !withdrawAmount || !withdrawContact.trim()} className="gradient-primary text-primary-foreground">
+                  <Button type="submit" disabled={withdrawLoading || !withdrawAmount || !withdrawContact.trim()} className="gradient-primary text-primary-foreground cursor-pointer">
                     {withdrawLoading && <Loader2 className="h-4 w-4 animate-spin mr-2" />}
                     {withdrawLoading ? t("referral.submitting") : t("referral.submit")}
                   </Button>
