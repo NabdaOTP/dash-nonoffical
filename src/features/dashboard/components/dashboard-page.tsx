@@ -35,7 +35,7 @@ export function DashboardPage() {
     return () => clearInterval(interval);
   }, [fetchData]);
 
-  // ====================== Page Visibility Fix ======================
+  // Page Visibility Fix 
   const handlePageBecomeVisible = useCallback(() => {
     if (document.visibilityState === "visible") {
       fetchData();

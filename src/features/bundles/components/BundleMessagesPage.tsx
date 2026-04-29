@@ -27,8 +27,8 @@ function formatDateTime(dateStr?: string): string {
 }
 
 const statusColors: Record<string, string> = {
-  sent:    "bg-success/10 text-success border-success/20",
-  queued:  "bg-blue-500/10 text-blue-600 border-blue-500/20",
+  sent: "bg-success/10 text-success border-success/20",
+  queued: "bg-blue-500/10 text-blue-600 border-blue-500/20",
   invalid: "bg-destructive/10 text-destructive border-destructive/20",
 };
 
@@ -42,13 +42,13 @@ export default function BundleMessagesPage({
   const t = useTranslations("bundles");
 
   const [bundleName, setBundleName] = useState("");
-  const [tab, setTab]               = useState<TabValue>("all");
-  const [messages, setMessages]     = useState<BundleMessage[]>([]);
-  const [loading, setLoading]       = useState(true);
-  const [page, setPage]             = useState(1);
-  const [total, setTotal]           = useState(0);
+  const [tab, setTab] = useState<TabValue>("all");
+  const [messages, setMessages] = useState<BundleMessage[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
-  const [limit]                     = useState(20);
+  const [limit] = useState(20);
 
   useEffect(() => {
     getBundleById(bundleId)
@@ -125,7 +125,7 @@ export default function BundleMessagesPage({
                       variant="outline"
                       className={`text-xs ${statusColors[m.status] ?? "bg-muted text-muted-foreground"}`}
                     >
-                      {m.status.toUpperCase()}
+                      {t(`messagesPage.tabs.${m.status}`)}
                     </Badge>
                   </TableCell>
                   <TableCell className="text-xs max-w-xs truncate">{m.message}</TableCell>
@@ -205,9 +205,9 @@ export default function BundleMessagesPage({
             <TabsTrigger className="data-[state=active]:bg-linear-to-r from-[#A78BFA] to-[#7C3AED]" value="sent">{t("messagesPage.tabs.sent")}</TabsTrigger>
             <TabsTrigger className="data-[state=active]:bg-linear-to-r from-[#A78BFA] to-[#7C3AED]" value="invalid">{t("messagesPage.tabs.invalid")}</TabsTrigger>
           </TabsList>
-          <TabsContent value="all"     className="mt-0">{renderTable()}</TabsContent>
-          <TabsContent value="queued"  className="mt-0">{renderTable()}</TabsContent>
-          <TabsContent value="sent"    className="mt-0">{renderTable()}</TabsContent>
+          <TabsContent value="all" className="mt-0">{renderTable()}</TabsContent>
+          <TabsContent value="queued" className="mt-0">{renderTable()}</TabsContent>
+          <TabsContent value="sent" className="mt-0">{renderTable()}</TabsContent>
           <TabsContent value="invalid" className="mt-0">{renderTable()}</TabsContent>
         </Tabs>
 

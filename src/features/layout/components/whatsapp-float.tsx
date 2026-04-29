@@ -10,7 +10,7 @@ export default function WhatsAppFloat() {
       href={`https://wa.me/${phoneNumber}`}
       target="_blank"
       rel="noopener noreferrer"
-      className="fixed bottom-14 start-2 md:-start-62 z-[9999] flex items-center gap-3 group"
+      className="fixed bottom-14 start-2 md:-start-62 z-9999 flex items-center gap-3 group"
       aria-label="Chat on WhatsApp"
     >
         

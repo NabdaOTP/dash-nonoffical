@@ -70,6 +70,13 @@
   },
   "detail": {
     "notFound": "Bundle not found",
+    "messagesButton": "Messages",
+    "rotateDialog": {
+      "title": "Rotate API Key",
+      "description": "This will invalidate your current API key immediately. Any existing integrations using the old key will stop working. Make sure to update your code with the new key.",
+      "cancel": "Cancel",
+      "confirm": "Yes, Rotate Key"
+    },
     "slots": {
       "title": "Slots",
       "description": "Each slot is a WhatsApp number in this bundle",
@@ -77,6 +84,14 @@
       "redirecting": "Redirecting…",
       "empty": "No slots yet — add your first WhatsApp number",
       "noSession": "No session",
+      "choosePlan": "Choose a plan",
+      "monthly": "Monthly",
+      "monthlyPrice": "$15 / month",
+      "annual": "Annual",
+      "annualPrice": "$165 / year — 1 month free",
+      "pay": "Pay",
+      "manageInstance": "Manage",
+      "manageSubscription": "Manage Subscription",
       "table": {
         "index": "#",
         "name": "Name",
@@ -156,6 +171,8 @@
     "apiKeyRotateError": "Failed to rotate API key",
     "purchaseError": "Failed to purchase slot",
     "slotDeleted": "Slot deleted",
-    "slotDeleteError": "Failed to delete slot"
+    "slotDeleteError": "Failed to delete slot",
+    "noPortalUrl": "No portal URL returned",
+    "manageSubscriptionError": "Failed to open subscription portal"
   }
 }

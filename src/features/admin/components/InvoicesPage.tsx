@@ -1,20 +1,19 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
-  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
-} from "@/components/ui/table";
-import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
-import { api } from "@/lib/api-client";
-import type { AdminInvoice } from "@/features/admin/types";
-import { Loader2, Download, ExternalLink, Search } from "lucide-react";
-import { toast } from "sonner";
+import {
+  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
+} from "@/components/ui/table";
 import { getAdminInvoices } from "@/features/admin/services/admin-service";
+import type { AdminInvoice } from "@/features/admin/types";
+import { Download, ExternalLink, Loader2, Search } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
+import { toast } from "sonner";
 
 
 function formatDate(dateStr?: string | null): string {
@@ -31,11 +30,11 @@ function formatAmount(amount?: string | null): string {
 }
 
 const statusStyles: Record<string, string> = {
-  paid:    "bg-green-100 text-green-700 border-green-200",
-  open:    "bg-blue-100 text-blue-700 border-blue-200",
-  void:    "bg-gray-100 text-gray-600 border-gray-200",
-  failed:  "bg-red-100 text-red-700 border-red-200",
-  draft:   "bg-yellow-100 text-yellow-700 border-yellow-200",
+  paid: "bg-green-100 text-green-700 border-green-200",
+  open: "bg-blue-100 text-blue-700 border-blue-200",
+  void: "bg-gray-100 text-gray-600 border-gray-200",
+  failed: "bg-red-100 text-red-700 border-red-200",
+  draft: "bg-yellow-100 text-yellow-700 border-yellow-200",
 };
 
 const STATUS_FILTERS = ["all", "paid", "open", "void", "failed", "draft"];

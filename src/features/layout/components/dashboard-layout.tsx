@@ -2,6 +2,9 @@
 
 import { Button } from "@/components/ui/button";
 import {
+  Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle,
+} from "@/components/ui/dialog";
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -27,13 +30,17 @@ import WhatsAppFloat from "./whatsapp-float";
 
 export function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [collapsed, setCollapsed] = useState(false);
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
   const t = useTranslations("common");
   const tAuth = useTranslations("auth");
   const { user, logout, isLoading, isAuthenticated } = useAuth();
 
-  const handleLogout = async () => {
+  const handleLogout = () => setShowLogoutConfirm(true);
+
+  const handleConfirmLogout = async () => {
+    setShowLogoutConfirm(false);
     await logout();
     router.push("/login");
   };
@@ -46,7 +53,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
   }, [isLoading, isAuthenticated, router]);
 
 
-  // ====================== Page Visibility Fix ======================
+  // Page Visibility Fix 
   // This solves the "tab freezing / inactivity" issue
   const handlePageBecomeVisible = useCallback(() => {
     if (document.visibilityState === "visible") {
@@ -133,7 +140,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
               variant="ghost"
               size="sm"
               onClick={() => setCollapsed(!collapsed)}
-              className="w-full justify-center text-muted-foreground"
+              className="w-full justify-center text-muted-foreground cursor-pointer"
             >
               {collapsed ? (
                 <ChevronRight className="h-4 w-4" />
@@ -176,7 +183,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm" className="gap-2">
+                  <Button variant="ghost" size="sm" className="gap-2 cursor-pointer">
                     <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center">
                       <User className="h-4 w-4 text-primary" />
                     </div>
@@ -231,6 +238,28 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
         </nav>
       </div>
       <WhatsAppFloat />
+
+      <Dialog open={showLogoutConfirm} onOpenChange={setShowLogoutConfirm}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <LogOut className="h-5 w-5 text-destructive" />
+              {tAuth("logoutDialog.title")}
+            </DialogTitle>
+            <DialogDescription>
+              {tAuth("logoutDialog.description")}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowLogoutConfirm(false)}>
+              {tAuth("logoutDialog.cancel")}
+            </Button>
+            <Button variant="destructive" onClick={handleConfirmLogout}>
+              {tAuth("logoutDialog.confirm")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
 
   );

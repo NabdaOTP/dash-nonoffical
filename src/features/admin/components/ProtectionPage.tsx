@@ -145,7 +145,7 @@ export default function AdminProtectionPage() {
                 </div>
             </div>
 
-            {/* ─── Rate Limits ─────────────────────────────────────────────── */}
+            {/* Rate Limits */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {/* New Accounts */}
                 <Card className="border border-border">
@@ -209,7 +209,7 @@ export default function AdminProtectionPage() {
                     </CardContent>
                 </Card>
 
-                {/* Warm Accounts */}
+                {/* warm accounts */}
                 <Card className="border border-border">
                     <CardHeader className="pb-3">
                         <div className="flex items-center gap-2">
@@ -334,7 +334,7 @@ export default function AdminProtectionPage() {
                 </Card>
             </div>
 
-            {/* ─── Soft Ban + Reconnect */}
+            {/* Soft Ban + Reconnect */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Soft Ban */}
                 <Card className="border border-border">
@@ -459,7 +459,7 @@ export default function AdminProtectionPage() {
                     </CardContent>
                 </Card>
             </div>
-            {/* ─── Confirmation Dialog  */}
+            {/* confirmation dialog  */}
             <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
                 <AlertDialogContent className="max-w-md sm:max-w-lg">
                     <AlertDialogHeader>

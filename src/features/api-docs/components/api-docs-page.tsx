@@ -62,11 +62,10 @@ export function ApiDocsPage() {
               <button
                 key={section.id}
                 onClick={() => setActiveSection(section.id)}
-                className={`w-full text-start px-3 py-2 rounded-lg text-sm transition-colors cursor-pointer ${
-                  activeSection === section.id
+                className={`w-full text-start px-3 py-2 rounded-lg text-sm transition-colors cursor-pointer ${activeSection === section.id
                     ? "bg-accent text-accent-foreground font-medium"
                     : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
-                }`}
+                  }`}
               >
                 {t(section.labelKey)}
               </button>

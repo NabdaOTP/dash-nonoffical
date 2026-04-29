@@ -21,12 +21,14 @@ import {
   getBundleById, getBundleSlots, updateBundle,
   purchaseBundleSlot, repurchaseBundleSlot, deleteBundleSlot, rotateBundleApiKey,
 } from "@/features/bundles/services/bundle-service";
+import { manageSubscription } from "@/features/billing/services/billing-service";
+import { useAuth } from "@/features/auth/context/auth-context";
 import type { BundleDetails, BundleSlot } from "@/features/bundles/types";
 import {
   Loader2, Webhook, Key, Plus, Trash2, RefreshCw,
   Copy, Check, ArrowLeft, Server, Wifi, WifiOff,
   CreditCard, AlertTriangle, MessageSquare,
-  ChevronDown, CalendarDays, CalendarRange,
+  ChevronDown, CalendarDays, CalendarRange, ExternalLink, MoreHorizontal,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
@@ -65,10 +67,12 @@ export function BundleDetailPage({ bundleId }: { bundleId: string }) {
   const [openPayMenuId, setOpenPayMenuId] = useState<string | null>(null);
   const [deletingSlotId, setDeletingSlotId] = useState<string | null>(null);
   const [confirmDeleteSlotId, setConfirmDeleteSlotId] = useState<string | null>(null);
+  const [managingSlotId, setManagingSlotId] = useState<string | null>(null); // ✅
 
   const router = useRouter();
   const locale = useLocale();
   const t = useTranslations("bundles");
+  const { selectInstance } = useAuth();
 
   const fetchAll = useCallback(async () => {
     setLoading(true);
@@ -131,7 +135,7 @@ export function BundleDetailPage({ bundleId }: { bundleId: string }) {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  // ✅ Add new slot بـ interval
+  // Add new slot 
   const handlePurchaseSlot = async (interval: "MONTHLY" | "YEARLY") => {
     setOpenAddSlotMenu(false);
     setPurchasing(true);
@@ -144,7 +148,7 @@ export function BundleDetailPage({ bundleId }: { bundleId: string }) {
     }
   };
 
-  // ✅ Repurchase existing slot بـ interval
+  // Repurchase existing slot 
   const handleRepurchaseSlot = async (slotId: string, interval: "MONTHLY" | "YEARLY") => {
     setOpenPayMenuId(null);
     setPayingSlotId(slotId);
@@ -171,6 +175,24 @@ export function BundleDetailPage({ bundleId }: { bundleId: string }) {
     }
   };
 
+  // Manage Subscription — Stripe Customer Portal
+  const handleManageSubscription = async (slotId: string) => {
+    setManagingSlotId(slotId);
+    try {
+      await selectInstance({ instanceId: slotId });
+      const result = await manageSubscription();
+      if (result?.url) {
+        window.open(result.url, "_blank");
+      } else {
+        toast.error(t("toast.noPortalUrl"));
+      }
+    } catch (err: unknown) {
+      toast.error((err as { message?: string })?.message ?? t("toast.manageSubscriptionError"));
+    } finally {
+      setManagingSlotId(null);
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
@@ -183,7 +205,7 @@ export function BundleDetailPage({ bundleId }: { bundleId: string }) {
     return <div className="text-center py-20 text-muted-foreground">{t("detail.notFound")}</div>;
   }
 
-  // ✅ API key بيرجع كـ string مباشرة دلوقتي
+  
   const displayApiKey = newApiKey ?? (typeof bundle.apiKey === "string" ? bundle.apiKey : null);
 
   return (
@@ -204,7 +226,7 @@ export function BundleDetailPage({ bundleId }: { bundleId: string }) {
             onClick={() => router.push(`/${locale}/bundles/${bundleId}/messages`)}
           >
             <MessageSquare className="h-4 w-4" />
-            Messages
+            {t("detail.messagesButton")}
           </Button>
           <Badge variant="outline" className={bundle.status === "ACTIVE" ? "bg-green-100 text-green-700 border-green-200" : "bg-red-100 text-red-700 border-red-200"}>
             {t(`status.${bundle.status}`)}
@@ -212,7 +234,7 @@ export function BundleDetailPage({ bundleId }: { bundleId: string }) {
         </div>
       </div>
 
-      {/* ─── Slots ─────────────────────────────────────────────────── */}
+      {/* Slots */}
       <Card className="border border-border">
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
@@ -225,7 +247,7 @@ export function BundleDetailPage({ bundleId }: { bundleId: string }) {
               <CardDescription className="text-xs mt-1">{t("detail.slots.description")}</CardDescription>
             </div>
 
-            {/* ✅ Add Slot dropdown — monthly/yearly */}
+            {/* Add Slot dropdown — monthly/yearly */}
             <DropdownMenu open={openAddSlotMenu} onOpenChange={setOpenAddSlotMenu}>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -240,21 +262,21 @@ export function BundleDetailPage({ bundleId }: { bundleId: string }) {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel className="text-xs text-muted-foreground">
-                  Choose a plan
+                  {t("detail.slots.choosePlan")}
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem className="cursor-pointer" onClick={() => handlePurchaseSlot("MONTHLY")}>
                   <CalendarDays className="h-4 w-4 me-2 text-[#7C3AED]" />
                   <div>
-                    <p className="font-medium">Monthly</p>
-                    <p className="text-xs text-muted-foreground">$15 / month</p>
+                    <p className="font-medium">{t("detail.slots.monthly")}</p>
+                    <p className="text-xs text-muted-foreground">{t("detail.slots.monthlyPrice")}</p>
                   </div>
                 </DropdownMenuItem>
                 <DropdownMenuItem className="cursor-pointer" onClick={() => handlePurchaseSlot("YEARLY")}>
                   <CalendarRange className="h-4 w-4 me-2 text-[#7C3AED]" />
                   <div>
-                    <p className="font-medium">Annual</p>
-                    <p className="text-xs text-muted-foreground">$165 / year — 1 month free</p>
+                    <p className="font-medium">{t("detail.slots.annual")}</p>
+                    <p className="text-xs text-muted-foreground">{t("detail.slots.annualPrice")}</p>
                   </div>
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -325,11 +347,11 @@ export function BundleDetailPage({ bundleId }: { bundleId: string }) {
                               className="h-7 px-2 text-xs bg-blue-500 hover:bg-blue-600 text-white gap-1 cursor-pointer"
                               onClick={(e) => { e.stopPropagation(); router.push(`/${locale}/instances/${slot.id}`); }}
                             >
-                              Manage
+                              {t("detail.slots.manageInstance")}
                             </Button>
                           )}
 
-                          {/* ✅ Pay dropdown — PAYMENT_PENDING only */}
+                          {/* Pay dropdown — PAYMENT_PENDING only */}
                           {isPending && (
                             <DropdownMenu
                               open={openPayMenuId === slot.id}
@@ -345,13 +367,13 @@ export function BundleDetailPage({ bundleId }: { bundleId: string }) {
                                   {payingSlotId === slot.id
                                     ? <Loader2 className="h-3 w-3 animate-spin" />
                                     : <CreditCard className="h-3 w-3" />}
-                                  Pay
+                                  {t("detail.slots.pay")}
                                   {payingSlotId !== slot.id && <ChevronDown className="h-3 w-3" />}
                                 </Button>
                               </DropdownMenuTrigger>
                               <DropdownMenuContent align="end" onClick={(e) => e.stopPropagation()}>
                                 <DropdownMenuLabel className="text-xs text-muted-foreground">
-                                  Choose a plan
+                                  {t("detail.slots.choosePlan")}
                                 </DropdownMenuLabel>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem
@@ -361,8 +383,8 @@ export function BundleDetailPage({ bundleId }: { bundleId: string }) {
                                 >
                                   <CalendarDays className="h-4 w-4 me-2 text-[#7C3AED]" />
                                   <div>
-                                    <p className="font-medium">Monthly</p>
-                                    <p className="text-xs text-muted-foreground">$15 / month</p>
+                                    <p className="font-medium">{t("detail.slots.monthly")}</p>
+                                    <p className="text-xs text-muted-foreground">{t("detail.slots.monthlyPrice")}</p>
                                   </div>
                                 </DropdownMenuItem>
                                 <DropdownMenuItem
@@ -372,8 +394,8 @@ export function BundleDetailPage({ bundleId }: { bundleId: string }) {
                                 >
                                   <CalendarRange className="h-4 w-4 me-2 text-[#7C3AED]" />
                                   <div>
-                                    <p className="font-medium">Annual</p>
-                                    <p className="text-xs text-muted-foreground">$165 / year — 1 month free</p>
+                                    <p className="font-medium">{t("detail.slots.annual")}</p>
+                                    <p className="text-xs text-muted-foreground">{t("detail.slots.annualPrice")}</p>
                                   </div>
                                 </DropdownMenuItem>
                               </DropdownMenuContent>
@@ -390,6 +412,33 @@ export function BundleDetailPage({ bundleId }: { bundleId: string }) {
                               ? <Loader2 className="h-4 w-4 animate-spin" />
                               : <Trash2 className="h-4 w-4" />}
                           </Button>
+
+                          {/* Manage Subscription dropdown — active only */}
+                          {isActive && (
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button
+                                  variant="ghost" size="icon"
+                                  className="h-8 w-8 cursor-pointer"
+                                  onClick={(e) => e.stopPropagation()}
+                                >
+                                  <MoreHorizontal className="h-4 w-4" />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end" onClick={(e) => e.stopPropagation()}>
+                                <DropdownMenuItem
+                                  className="cursor-pointer"
+                                  onClick={() => handleManageSubscription(slot.id)}
+                                  disabled={managingSlotId === slot.id}
+                                >
+                                  {managingSlotId === slot.id
+                                    ? <Loader2 className="h-4 w-4 me-2 animate-spin" />
+                                    : <ExternalLink className="h-4 w-4 me-2" />}
+                                  {t("detail.slots.manageSubscription")}
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          )}
                         </div>
                       </TableCell>
                     </TableRow>
@@ -401,7 +450,7 @@ export function BundleDetailPage({ bundleId }: { bundleId: string }) {
         </CardContent>
       </Card>
 
-      {/* ─── API Key ───────────────────────────────────────────────── */}
+      {/* API Key */}
       <Card className="border border-border">
         <CardHeader className="pb-3">
           <div className="flex items-center gap-2">
@@ -412,7 +461,7 @@ export function BundleDetailPage({ bundleId }: { bundleId: string }) {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center gap-2">
-            {/* ✅ API key كامل بدون bullets */}
+            {/* full api key */}
             <div className="flex-1 bg-muted rounded-lg px-4 py-2.5 font-mono text-sm break-all">
               {newApiKey ?? (typeof bundle.apiKey === "string" ? bundle.apiKey : "—")}
             </div>
@@ -424,11 +473,6 @@ export function BundleDetailPage({ bundleId }: { bundleId: string }) {
               {copied ? <Check className="h-4 w-4 text-green-600" /> : <Copy className="h-4 w-4" />}
             </Button>
           </div>
-          {/* {newApiKey && (
-            <p className="text-xs text-yellow-600 bg-yellow-50 border border-yellow-200 rounded-lg px-3 py-2">
-              ⚠️ {t("detail.apiKey.newKeyWarning")}
-            </p>
-          )} */}
           <Button
             variant="outline" size="sm"
             onClick={() => setShowRotateConfirm(true)}
@@ -441,7 +485,7 @@ export function BundleDetailPage({ bundleId }: { bundleId: string }) {
         </CardContent>
       </Card>
 
-      {/* ─── Webhook ───────────────────────────────────────────────── */}
+      {/* Webhook */}
       <Card className="border border-border">
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
@@ -486,17 +530,17 @@ export function BundleDetailPage({ bundleId }: { bundleId: string }) {
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <AlertTriangle className="h-5 w-5 text-destructive" />
-              Rotate API Key
+              {t("detail.rotateDialog.title")}
             </DialogTitle>
             <DialogDescription>
-              This will invalidate your current API key immediately. Any existing integrations using the old key will stop working. Make sure to update your code with the new key.
+              {t("detail.rotateDialog.description")}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowRotateConfirm(false)}>Cancel</Button>
+            <Button variant="outline" onClick={() => setShowRotateConfirm(false)}>{t("detail.rotateDialog.cancel")}</Button>
             <Button variant="destructive" onClick={handleRotateKey} disabled={rotating}>
               {rotating && <Loader2 className="h-4 w-4 animate-spin me-2" />}
-              Yes, Rotate Key
+              {t("detail.rotateDialog.confirm")}
             </Button>
           </DialogFooter>
         </DialogContent>

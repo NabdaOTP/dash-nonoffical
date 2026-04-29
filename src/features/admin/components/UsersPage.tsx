@@ -31,9 +31,9 @@ function formatDate(dateStr?: string | null): string {
 }
 
 const roleStyles: Record<string, string> = {
-  ADMIN:       "bg-red-100 text-red-700 border-red-200",
+  ADMIN: "bg-red-100 text-red-700 border-red-200",
   SUPER_ADMIN: "bg-red-100 text-red-700 border-red-200",
-  OWNER:       "bg-blue-100 text-blue-700 border-blue-200",
+  OWNER: "bg-blue-100 text-blue-700 border-blue-200",
 };
 
 type ConfirmAction = {
@@ -78,12 +78,12 @@ export default function AdminUsersPage() {
     setActionLoading(true);
     try {
       if (confirm.type === "deactivate") await deactivateUser(confirm.user.id);
-      if (confirm.type === "delete")     await softDeleteUser(confirm.user.id);
-      if (confirm.type === "restore")    await restoreUser(confirm.user.id);
+      if (confirm.type === "delete") await softDeleteUser(confirm.user.id);
+      if (confirm.type === "restore") await restoreUser(confirm.user.id);
       toast.success(
         confirm.type === "deactivate" ? "User deactivated" :
-        confirm.type === "delete"     ? "User deleted" :
-        "User restored"
+          confirm.type === "delete" ? "User deleted" :
+            "User restored"
       );
       setConfirm(null);
       await fetchUsers();
@@ -184,7 +184,7 @@ export default function AdminUsersPage() {
                         {formatDate(user.createdAt)}
                       </TableCell>
                       <TableCell className="text-end">
-                        {user.role !== "ADMIN" &&(<DropdownMenu>
+                        {user.role !== "ADMIN" && (<DropdownMenu>
                           <DropdownMenuTrigger asChild>
                             <Button variant="ghost" size="icon" className="h-8 w-8">
                               <MoreHorizontal className="h-4 w-4" />
@@ -256,22 +256,22 @@ export default function AdminUsersPage() {
         </div>
       )}
 
-      {/* Confirm Dialog */}
+      {/* confirm dialog */}
       <Dialog open={!!confirm} onOpenChange={() => setConfirm(null)}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <ShieldAlert className="h-5 w-5 text-destructive" />
               {confirm?.type === "deactivate" ? "Deactivate User" :
-               confirm?.type === "delete"     ? "Delete User" :
-               "Restore User"}
+                confirm?.type === "delete" ? "Delete User" :
+                  "Restore User"}
             </DialogTitle>
             <DialogDescription>
               {confirm?.type === "deactivate"
                 ? `Are you sure you want to deactivate "${confirm.user.name}"?`
                 : confirm?.type === "delete"
-                ? `Are you sure you want to delete "${confirm?.user.name}"? This action can be reversed.`
-                : `Restore "${confirm?.user.name}" and reactivate their account?`}
+                  ? `Are you sure you want to delete "${confirm?.user.name}"? This action can be reversed.`
+                  : `Restore "${confirm?.user.name}" and reactivate their account?`}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -285,8 +285,8 @@ export default function AdminUsersPage() {
             >
               {actionLoading && <Loader2 className="h-4 w-4 animate-spin me-2" />}
               {confirm?.type === "deactivate" ? "Deactivate" :
-               confirm?.type === "delete"     ? "Delete" :
-               "Restore"}
+                confirm?.type === "delete" ? "Delete" :
+                  "Restore"}
             </Button>
           </DialogFooter>
         </DialogContent>

@@ -59,10 +59,7 @@ function formatDate(dateStr: string): string {
   } catch { return "—"; }
 }
 
-// function getDisplayExpiry(inst: Instance): string {
-//   if (!inst.expiresAt) return "—";
-//   return formatDate(inst.expiresAt);
-// }
+
 function getDisplayExpiry(inst: Instance): string {
   if (inst.status === "SUSPENDED" || inst.status === "PAYMENT_PENDING") {
     return "—";
