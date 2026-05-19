@@ -105,7 +105,7 @@
   "authStatus": "Auth Status",
   "apiUrl": "API URL",
   "instanceId": "Instance ID",
-  "token": "Token",
+  "token": "API Key",
   "textArea":"Your message here...",
   
   "connectWhatsApp": "Connect WhatsApp",
