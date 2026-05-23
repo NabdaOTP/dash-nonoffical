@@ -399,16 +399,14 @@ export function InstancesPage() {
                         <TableCell className="text-end" onClick={(e) => e.stopPropagation()}>
                           <div className="flex items-center justify-end gap-1 flex-wrap">
                             {!isBlocked && (
-                              <Link href={`/${locale}/instances/${inst.id}`}>
-                                <Button
-                                  variant="default" size="sm"
-                                  className="bg-blue-500 hover:bg-blue-600 text-white gap-1.5 cursor-pointer"
-                                  onClick={(e) => e.stopPropagation()}
-                                >
-                                  <Rocket className="h-3.5 w-3.5" />
-                                  {t("manage")}
-                                </Button>
-                              </Link>
+                              <Button
+                                variant="default" size="sm"
+                                className="bg-blue-500 hover:bg-blue-600 text-white gap-1.5 cursor-pointer"
+                                onClick={(e) => { e.stopPropagation(); router.push(`/${locale}/instances/${inst.id}`); }}
+                              >
+                                <Rocket className="h-3.5 w-3.5" />
+                                {t("manage")}
+                              </Button>
                             )}
 
                             {/*  Pay — dropdown */}

@@ -105,7 +105,7 @@
   "authStatus": "حالة التوثيق",
   "apiUrl": "رابط API",
   "instanceId": "معرف النسخة",
-  "token": "التوكن",
+  "token": "مفتاح API",
   "textArea":"رسالتك هنا ...",
 
   "connectWhatsApp": "ربط واتساب",

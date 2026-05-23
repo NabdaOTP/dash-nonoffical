@@ -35,14 +35,14 @@ import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 
 const slotStatusStyles: Record<string, string> = {
-  ACTIVE:          "bg-green-100 text-green-700 border-green-200",
+  ACTIVE: "bg-green-100 text-green-700 border-green-200",
   PAYMENT_PENDING: "bg-yellow-100 text-yellow-700 border-yellow-200",
-  SUSPENDED:       "bg-red-100 text-red-700 border-red-200",
+  SUSPENDED: "bg-red-100 text-red-700 border-red-200",
 };
 
 const sessionStatusStyles: Record<string, string> = {
-  CONNECTED:    "bg-green-100 text-green-700 border-green-200",
-  CONNECTING:   "bg-blue-100 text-blue-700 border-blue-200",
+  CONNECTED: "bg-green-100 text-green-700 border-green-200",
+  CONNECTING: "bg-blue-100 text-blue-700 border-blue-200",
   RECONNECTING: "bg-yellow-100 text-yellow-700 border-yellow-200",
   DISCONNECTED: "bg-gray-100 text-gray-600 border-gray-200",
 };
@@ -205,7 +205,7 @@ export function BundleDetailPage({ bundleId }: { bundleId: string }) {
     return <div className="text-center py-20 text-muted-foreground">{t("detail.notFound")}</div>;
   }
 
-  
+
   const displayApiKey = newApiKey ?? (typeof bundle.apiKey === "string" ? bundle.apiKey : null);
 
   return (
@@ -403,16 +403,17 @@ export function BundleDetailPage({ bundleId }: { bundleId: string }) {
                           )}
 
                           {/* Delete */}
-                          <Button
-                            variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:text-destructive cursor-pointer"
-                            onClick={(e) => { e.stopPropagation(); setConfirmDeleteSlotId(slot.id); }}
-                            disabled={deletingSlotId === slot.id}
-                          >
-                            {deletingSlotId === slot.id
-                              ? <Loader2 className="h-4 w-4 animate-spin" />
-                              : <Trash2 className="h-4 w-4" />}
-                          </Button>
-
+                          {!isActive && (
+                            <Button
+                              variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:text-destructive cursor-pointer"
+                              onClick={(e) => { e.stopPropagation(); setConfirmDeleteSlotId(slot.id); }}
+                              disabled={deletingSlotId === slot.id}
+                            >
+                              {deletingSlotId === slot.id
+                                ? <Loader2 className="h-4 w-4 animate-spin" />
+                                : <Trash2 className="h-4 w-4" />}
+                            </Button>
+                          )}
                           {/* Manage Subscription dropdown — active only */}
                           {isActive && (
                             <DropdownMenu>
