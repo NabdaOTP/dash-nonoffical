@@ -1,3 +1,4 @@
+// admin user
 export interface AdminUser {
   id: string;
   name: string;
@@ -11,6 +12,27 @@ export interface AdminUser {
   twoFactorEnabled: boolean;
 }
 
+// Impersonation
+export interface ImpersonateResponse {
+  accessToken: string;
+  user: {
+    id: string;
+    email: string;
+    name: string;
+    phone: string;
+    role: string;
+  };
+  actor: {
+    id: string;
+    email: string;
+    name: string;
+    phone: string;
+    role: string;
+  };
+  impersonating: true;
+}
+
+// admin instance
 export interface AdminInstance {
   id: string;
   name: string;
@@ -145,11 +167,11 @@ export interface ProtectionLimit {
   perMin: number;
   perHour: number;
 }
- 
+
 export interface SoftBanRequest {
   seconds: number;
 }
- 
+
 export interface ReconnectRequest {
   baseMs: number;
   maxMs: number;

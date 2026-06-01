@@ -1,5 +1,5 @@
 import { api } from "@/lib/api-client";
-import { AdminBundle, AdminInstance, AdminInvoice, AdminPlan, AdminProxy, AdminReferralSettings, AdminReferralWithdrawalsResponse, AdminStatsData, AdminSubscription, AdminUser, PaginatedResponse, ProtectionLimit, ReconnectRequest, ReferralBackfillResponse, SoftBanRequest, UpdateWithdrawalPayload, WithdrawalStatus } from "../types";
+import { AdminBundle, AdminInstance, AdminInvoice, AdminPlan, AdminProxy, AdminReferralSettings, AdminReferralWithdrawalsResponse, AdminStatsData, AdminSubscription, AdminUser, ImpersonateResponse, PaginatedResponse, ProtectionLimit, ReconnectRequest, ReferralBackfillResponse, SoftBanRequest, UpdateWithdrawalPayload, WithdrawalStatus } from "../types";
 import { BundleSlot } from "@/features/bundles/types";
 
 const adminScope = { tokenScope: "user" as const };
@@ -28,6 +28,15 @@ export async function softDeleteUser(id: string): Promise<void> {
 
 export async function restoreUser(id: string): Promise<void> {
   return api.patch<void>(`/api/v1/admin/users/${id}/restore`, {}, adminScope);
+}
+
+
+export async function impersonateUser(id: string): Promise<ImpersonateResponse> {
+  return api.post<ImpersonateResponse>(
+    `/api/v1/admin/users/${id}/impersonate`,
+    {},
+    adminScope
+  );
 }
 
 // Instances
@@ -223,19 +232,19 @@ export async function getAdminBundles(): Promise<AdminBundle[]> {
   const res = await api.get<AdminBundle[]>("/api/v1/admin/bundles", adminScope);
   return Array.isArray(res) ? res : [];
 }
- 
+
 export async function updateAdminBundleStatus(id: string, status: "ACTIVE" | "SUSPENDED"): Promise<void> {
   await api.patch(`/api/v1/admin/bundles/${id}/status`, { status }, adminScope);
 }
- 
+
 export async function deleteAdminBundle(id: string): Promise<void> {
   await api.delete(`/api/v1/admin/bundles/${id}`, adminScope);
 }
- 
+
 export async function rotateAdminBundleApiKey(id: string): Promise<{ apiKey: string }> {
   return api.post<{ apiKey: string }>(`/api/v1/admin/bundles/${id}/api-key/rotate`, {}, adminScope);
 }
- 
+
 export async function getAdminBundleSlots(id: string): Promise<BundleSlot[]> {
   const res = await api.get<BundleSlot[]>(`/api/v1/admin/bundles/${id}/slots`, adminScope);
   return Array.isArray(res) ? res : [];

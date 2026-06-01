@@ -23,6 +23,7 @@ import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useState } from "react";
 // import { ThemeToggle } from "./theme-toggle";
 import { useAuth } from "@/features/auth/context/auth-context";
+import { ImpersonationBanner } from "@/features/admin/components/impersonation-banner";
 import Image from "next/image";
 import { navItems } from "../constants";
 import { LanguageSwitcher } from "./language-switcher";
@@ -82,6 +83,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <>
+      <ImpersonationBanner/>
       <div className="flex min-h-screen w-full bg-background">
         {/* Desktop Sidebar */}
         <aside
