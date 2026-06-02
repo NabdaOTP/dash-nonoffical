@@ -20,7 +20,7 @@ import {
 } from "@/features/admin/services/admin-service";
 import type { AdminProxy, AdminProxyStats } from "@/features/admin/types";
 import {
-    Loader2, Plus, Pencil, Trash2, MoreHorizontal, Server, Wifi,
+    Loader2, Plus, Pencil, Trash2, MoreHorizontal, Server, Wifi, Eye, EyeOff,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -44,6 +44,7 @@ export default function AdminProxiesPage() {
     const [selected, setSelected] = useState<AdminProxy | null>(null);
     const [form, setForm] = useState<Partial<AdminProxy>>(emptyForm());
     const [saving, setSaving] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     const fetchAll = useCallback(async () => {
         setLoading(true);
@@ -103,6 +104,8 @@ export default function AdminProxiesPage() {
                 toast.success("Proxy updated");
             }
             setMode(null);
+            setForm(emptyForm());
+            setSelected(null);
             await fetchAll();
         } catch (err: unknown) {
             toast.error((err as { message?: string })?.message ?? "Failed to save proxy");
@@ -182,7 +185,7 @@ export default function AdminProxiesPage() {
                     })}
                 </div>
             )}
-            
+
             {/* Table */}
             {loading ? (
                 <div className="flex items-center justify-center py-20">
@@ -308,7 +311,23 @@ export default function AdminProxiesPage() {
                             </div>
                             <div className="space-y-2">
                                 <Label>Password</Label>
-                                <Input type="password" value={form.password ?? ""} onChange={(e) => updateForm("password", e.target.value)} disabled={saving} />
+                                <div className="relative">
+                                    <Input
+                                        type={showPassword ? "text" : "password"}
+                                        value={form.password ?? ""}
+                                        onChange={(e) => updateForm("password", e.target.value)}
+                                        disabled={saving}
+                                        className="pr-10"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword((v) => !v)}
+                                        className="absolute end-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                                        tabIndex={-1}
+                                    >
+                                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                                    </button>
+                                </div>
                             </div>
                         </div>
                         <div className="grid grid-cols-2 gap-4">

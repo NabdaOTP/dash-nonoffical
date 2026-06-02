@@ -1,3 +1,4 @@
+// src/app/[locale]/(admin)/admin/users/page.tsx
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
@@ -8,17 +9,18 @@ import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
 import {
-  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
   Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogDescription,
 } from "@/components/ui/dialog";
 import {
-  getAdminUsers, deactivateUser, softDeleteUser, restoreUser,
+  getAdminUsers, deactivateUser, softDeleteUser, restoreUser, impersonateUser,
 } from "@/features/admin/services/admin-service";
+import { startImpersonation } from "@/features/admin/utils/impersonation";
 import type { AdminUser } from "@/features/admin/types";
 import {
-  Loader2, Search, MoreHorizontal, UserX, UserCheck, Trash2, ShieldAlert,
+  Loader2, Search, MoreHorizontal, UserX, UserCheck, Trash2, ShieldAlert, LogIn,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -37,7 +39,7 @@ const roleStyles: Record<string, string> = {
 };
 
 type ConfirmAction = {
-  type: "deactivate" | "delete" | "restore";
+  type: "deactivate" | "delete" | "restore" | "impersonate";
   user: AdminUser;
 };
 
@@ -77,22 +79,74 @@ export default function AdminUsersPage() {
     if (!confirm) return;
     setActionLoading(true);
     try {
-      if (confirm.type === "deactivate") await deactivateUser(confirm.user.id);
-      if (confirm.type === "delete") await softDeleteUser(confirm.user.id);
-      if (confirm.type === "restore") await restoreUser(confirm.user.id);
-      toast.success(
-        confirm.type === "deactivate" ? "User deactivated" :
-          confirm.type === "delete" ? "User deleted" :
-            "User restored"
-      );
-      setConfirm(null);
-      await fetchUsers();
+      if (confirm.type === "deactivate") {
+        await deactivateUser(confirm.user.id);
+        toast.success("User deactivated");
+        setConfirm(null);
+        await fetchUsers();
+      } else if (confirm.type === "delete") {
+        await softDeleteUser(confirm.user.id);
+        toast.success("User deleted");
+        setConfirm(null);
+        await fetchUsers();
+      } else if (confirm.type === "restore") {
+        await restoreUser(confirm.user.id);
+        toast.success("User restored");
+        setConfirm(null);
+        await fetchUsers();
+      } else if (confirm.type === "impersonate") {
+        const res = await impersonateUser(confirm.user.id);
+        startImpersonation(res.accessToken, {
+          user: res.user,
+          actor: res.actor,
+        });
+        toast.success(`Switching to ${res.user.name}...`);
+        // Full page reload so auth context + middleware re-evaluate with the new token
+        window.location.href = "/dashboard";
+      }
     } catch (err: unknown) {
       toast.error((err as { message?: string })?.message ?? "Action failed");
     } finally {
       setActionLoading(false);
     }
   };
+
+  // ─── Dialog content helpers ───────────────────────────────────
+  const dialogTitle = () => {
+    switch (confirm?.type) {
+      case "deactivate": return "Deactivate User";
+      case "delete": return "Delete User";
+      case "restore": return "Restore User";
+      case "impersonate": return "Login as User";
+      default: return "";
+    }
+  };
+
+  const dialogDescription = () => {
+    if (!confirm) return "";
+    switch (confirm.type) {
+      case "deactivate":
+        return `Are you sure you want to deactivate "${confirm.user.name}"?`;
+      case "delete":
+        return `Are you sure you want to delete "${confirm.user.name}"? This action can be reversed.`;
+      case "restore":
+        return `Restore "${confirm.user.name}" and reactivate their account?`;
+      case "impersonate":
+        return `You will be logged in as "${confirm.user.name}" (${confirm.user.email}). You'll be redirected to their dashboard and can return to admin anytime from the top banner.`;
+    }
+  };
+
+  const dialogButtonLabel = () => {
+    switch (confirm?.type) {
+      case "deactivate": return "Deactivate";
+      case "delete": return "Delete";
+      case "restore": return "Restore";
+      case "impersonate": return "Login as User";
+      default: return "Confirm";
+    }
+  };
+
+  const isDestructive = confirm?.type === "deactivate" || confirm?.type === "delete";
 
   return (
     <div className="space-y-6">
@@ -184,51 +238,74 @@ export default function AdminUsersPage() {
                         {formatDate(user.createdAt)}
                       </TableCell>
                       <TableCell className="text-end">
-                        {user.role !== "ADMIN" && (<DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon" className="h-8 w-8">
-                              <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            {!user.deletedAt && user.isActive && (
-                              <DropdownMenuItem
-                                className="text-yellow-600"
-                                onClick={() => setConfirm({ type: "deactivate", user })}
-                              >
-                                <UserX className="h-4 w-4 me-2" />
-                                Deactivate
-                              </DropdownMenuItem>
-                            )}
-                            {!user.deletedAt && !user.isActive && (
-                              <DropdownMenuItem
-                                className="text-green-600"
-                                onClick={() => setConfirm({ type: "restore", user })}
-                              >
-                                <UserCheck className="h-4 w-4 me-2" />
-                                Restore
-                              </DropdownMenuItem>
-                            )}
-                            {user.deletedAt && (
-                              <DropdownMenuItem
-                                className="text-green-600"
-                                onClick={() => setConfirm({ type: "restore", user })}
-                              >
-                                <UserCheck className="h-4 w-4 me-2" />
-                                Restore
-                              </DropdownMenuItem>
-                            )}
-                            {!user.deletedAt && (
-                              <DropdownMenuItem
-                                className="text-destructive focus:text-destructive"
-                                onClick={() => setConfirm({ type: "delete", user })}
-                              >
-                                <Trash2 className="h-4 w-4 me-2" />
-                                Delete
-                              </DropdownMenuItem>
-                            )}
-                          </DropdownMenuContent>
-                        </DropdownMenu>)}
+                        {user.role !== "ADMIN" && (
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button variant="ghost" size="icon" className="h-8 w-8">
+                                <MoreHorizontal className="h-4 w-4" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              {/* ── Login as User ── */}
+                              {!user.deletedAt && user.isActive && (
+                                <DropdownMenuItem
+                                  className="text-blue-600"
+                                  onClick={() => setConfirm({ type: "impersonate", user })}
+                                >
+                                  <LogIn className="h-4 w-4 me-2" />
+                                  Login as User
+                                </DropdownMenuItem>
+                              )}
+
+                              {/* Separator between impersonate and destructive actions */}
+                              {!user.deletedAt && user.isActive && <DropdownMenuSeparator />}
+
+                              {/* ── Deactivate ── */}
+                              {!user.deletedAt && user.isActive && (
+                                <DropdownMenuItem
+                                  className="text-yellow-600"
+                                  onClick={() => setConfirm({ type: "deactivate", user })}
+                                >
+                                  <UserX className="h-4 w-4 me-2" />
+                                  Deactivate
+                                </DropdownMenuItem>
+                              )}
+
+                              {/* ── Restore (inactive) ── */}
+                              {!user.deletedAt && !user.isActive && (
+                                <DropdownMenuItem
+                                  className="text-green-600"
+                                  onClick={() => setConfirm({ type: "restore", user })}
+                                >
+                                  <UserCheck className="h-4 w-4 me-2" />
+                                  Restore
+                                </DropdownMenuItem>
+                              )}
+
+                              {/* ── Restore (deleted) ── */}
+                              {user.deletedAt && (
+                                <DropdownMenuItem
+                                  className="text-green-600"
+                                  onClick={() => setConfirm({ type: "restore", user })}
+                                >
+                                  <UserCheck className="h-4 w-4 me-2" />
+                                  Restore
+                                </DropdownMenuItem>
+                              )}
+
+                              {/* ── Delete ── */}
+                              {!user.deletedAt && (
+                                <DropdownMenuItem
+                                  className="text-destructive focus:text-destructive"
+                                  onClick={() => setConfirm({ type: "delete", user })}
+                                >
+                                  <Trash2 className="h-4 w-4 me-2" />
+                                  Delete
+                                </DropdownMenuItem>
+                              )}
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        )}
                       </TableCell>
                     </TableRow>
                   ))
@@ -256,22 +333,20 @@ export default function AdminUsersPage() {
         </div>
       )}
 
-      {/* confirm dialog */}
+      {/* ── Confirm Dialog ── */}
       <Dialog open={!!confirm} onOpenChange={() => setConfirm(null)}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <ShieldAlert className="h-5 w-5 text-destructive" />
-              {confirm?.type === "deactivate" ? "Deactivate User" :
-                confirm?.type === "delete" ? "Delete User" :
-                  "Restore User"}
+              {confirm?.type === "impersonate" ? (
+                <LogIn className="h-5 w-5 text-blue-600" />
+              ) : (
+                <ShieldAlert className="h-5 w-5 text-destructive" />
+              )}
+              {dialogTitle()}
             </DialogTitle>
             <DialogDescription>
-              {confirm?.type === "deactivate"
-                ? `Are you sure you want to deactivate "${confirm.user.name}"?`
-                : confirm?.type === "delete"
-                  ? `Are you sure you want to delete "${confirm?.user.name}"? This action can be reversed.`
-                  : `Restore "${confirm?.user.name}" and reactivate their account?`}
+              {dialogDescription()}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -279,14 +354,12 @@ export default function AdminUsersPage() {
               Cancel
             </Button>
             <Button
-              variant={confirm?.type === "restore" ? "default" : "destructive"}
+              variant={isDestructive ? "destructive" : "default"}
               onClick={handleConfirm}
               disabled={actionLoading}
             >
               {actionLoading && <Loader2 className="h-4 w-4 animate-spin me-2" />}
-              {confirm?.type === "deactivate" ? "Deactivate" :
-                confirm?.type === "delete" ? "Delete" :
-                  "Restore"}
+              {dialogButtonLabel()}
             </Button>
           </DialogFooter>
         </DialogContent>
