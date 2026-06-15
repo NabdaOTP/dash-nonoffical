@@ -7,9 +7,11 @@ const adminScope = { tokenScope: "user" as const };
 
 // Users 
 
-export async function getAdminUsers(page = 1, limit = 20): Promise<PaginatedResponse<AdminUser>> {
+export async function getAdminUsers(page = 1, limit = 20, search?: string): Promise<PaginatedResponse<AdminUser>> {
+  const params = new URLSearchParams({ page: String(page), limit: String(limit) });
+  if (search) params.set("search", search);
   return api.get<PaginatedResponse<AdminUser>>(
-    `/api/v1/admin/users?page=${page}&limit=${limit}`,
+    `/api/v1/admin/users?${params}`,
     adminScope
   );
 }

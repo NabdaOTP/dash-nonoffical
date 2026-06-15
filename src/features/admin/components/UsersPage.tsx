@@ -47,6 +47,7 @@ export default function AdminUsersPage() {
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [total, setTotal] = useState(0);
@@ -54,10 +55,17 @@ export default function AdminUsersPage() {
   const [actionLoading, setActionLoading] = useState(false);
   const limit = 20;
 
+  useEffect(() => {
+    const t = setTimeout(() => setDebouncedSearch(search), 400);
+    return () => clearTimeout(t);
+  }, [search]);
+
+  useEffect(() => { setPage(1); }, [debouncedSearch]);
+
   const fetchUsers = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await getAdminUsers(page, limit);
+      const res = await getAdminUsers(page, limit, debouncedSearch || undefined);
       setUsers(res.items);
       setTotal(res.meta.total);
       setTotalPages(res.meta.pages);
@@ -66,14 +74,9 @@ export default function AdminUsersPage() {
     } finally {
       setLoading(false);
     }
-  }, [page]);
+  }, [page, debouncedSearch]);
 
   useEffect(() => { fetchUsers(); }, [fetchUsers]);
-
-  const filtered = users.filter((u) =>
-    u.name?.toLowerCase().includes(search.toLowerCase()) ||
-    u.email?.toLowerCase().includes(search.toLowerCase())
-  );
 
   const handleConfirm = async () => {
     if (!confirm) return;
@@ -194,14 +197,14 @@ export default function AdminUsersPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filtered.length === 0 ? (
+                {users.length === 0 ? (
                   <TableRow>
                     <TableCell colSpan={10} className="text-center py-10 text-muted-foreground">
                       No users found
                     </TableCell>
                   </TableRow>
                 ) : (
-                  filtered.map((user, index) => (
+                  users.map((user, index) => (
                     <TableRow
                       key={user.id}
                       className={user.deletedAt ? "opacity-50" : ""}
