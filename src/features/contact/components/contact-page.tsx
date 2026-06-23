@@ -54,7 +54,7 @@ export function ContactPage() {
               dir="ltr"
               className="text-3xl font-bold text-foreground tracking-tight font-mono"
             >
-              +90 534 663 91 45
+              +90 535 268 23 50
             </p>
           </div>
 
