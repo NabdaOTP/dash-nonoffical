@@ -60,7 +60,7 @@ export function ContactPage() {
 
           {/* CTA Button */}
           <a
-            href="https://wa.me/905346639145"
+            href="https://wa.me/905352682350"
             target="_blank"
             rel="noopener noreferrer"
             className="block"
