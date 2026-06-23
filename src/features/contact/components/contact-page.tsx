@@ -54,13 +54,13 @@ export function ContactPage() {
               dir="ltr"
               className="text-3xl font-bold text-foreground tracking-tight font-mono"
             >
-              +90 534 663 91 45
+              +90 535 268 23 50
             </p>
           </div>
 
           {/* CTA Button */}
           <a
-            href="https://wa.me/905346639145"
+            href="https://wa.me/905352682350"
             target="_blank"
             rel="noopener noreferrer"
             className="block"
