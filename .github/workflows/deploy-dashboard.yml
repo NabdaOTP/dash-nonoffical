@@ -1,0 +1,109 @@
+name: Deploy Dashboard
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  DEPLOY_ENV: production
+
+jobs:
+  deploy:
+    name: Build and deploy dashboard
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Compute image name
+        id: image
+        shell: bash
+        run: |
+          owner="$(printf '%s' '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')"
+          repo="$(printf '%s' '${{ github.event.repository.name }}' | tr '[:upper:]' '[:lower:]')"
+          echo "repo=${repo}" >> "$GITHUB_OUTPUT"
+          echo "name=ghcr.io/${owner}/${repo}" >> "$GITHUB_OUTPUT"
+          echo "tag=${{ github.sha }}" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Build
+        env:
+          BACKEND_URL: ${{ vars.DASHBOARD_API_URL }}
+          NEXT_PUBLIC_API_URL: ${{ vars.DASHBOARD_API_URL }}
+        run: npm run build
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+
+      - name: Build and push image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          build-args: |
+            BACKEND_URL=${{ vars.DASHBOARD_API_URL }}
+            NEXT_PUBLIC_API_URL=${{ vars.DASHBOARD_API_URL }}
+          tags: |
+            ${{ steps.image.outputs.name }}:${{ github.sha }}
+            ${{ steps.image.outputs.name }}:${{ env.DEPLOY_ENV }}-latest
+
+      - name: Prepare SSH
+        shell: bash
+        env:
+          DEPLOY_SSH_KEY: ${{ secrets.FRONTEND_DEPLOY_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          python3 -c "import os, pathlib; key=os.environ['DEPLOY_SSH_KEY'].strip().strip(chr(34)).strip(chr(39)); key=key.replace('\\\\n', '\n').replace('\r', ''); pathlib.Path.home().joinpath('.ssh', 'deploy_key').write_text(key + '\n')"
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keygen -y -f ~/.ssh/deploy_key > ~/.ssh/deploy_key.pub
+          ssh-keyscan -p "${{ secrets.FRONTEND_DEPLOY_PORT || '22' }}" "${{ secrets.FRONTEND_DEPLOY_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Copy deploy script
+        shell: bash
+        run: |
+          ssh -i ~/.ssh/deploy_key -p "${{ secrets.FRONTEND_DEPLOY_PORT || '22' }}" "${{ secrets.FRONTEND_DEPLOY_USER }}@${{ secrets.FRONTEND_DEPLOY_HOST }}" "mkdir -p '${{ vars.FRONTEND_DEPLOY_PATH }}/scripts'"
+          scp -i ~/.ssh/deploy_key -P "${{ secrets.FRONTEND_DEPLOY_PORT || '22' }}" scripts/deploy-next-blue-green.sh "${{ secrets.FRONTEND_DEPLOY_USER }}@${{ secrets.FRONTEND_DEPLOY_HOST }}:${{ vars.FRONTEND_DEPLOY_PATH }}/scripts/deploy-next-blue-green.sh"
+
+      - name: Deploy
+        shell: bash
+        run: |
+          primary_domain="$(printf '%s' '${{ vars.DASHBOARD_DOMAINS }}' | awk '{print $1}')"
+          ssh -i ~/.ssh/deploy_key -p "${{ secrets.FRONTEND_DEPLOY_PORT || '22' }}" "${{ secrets.FRONTEND_DEPLOY_USER }}@${{ secrets.FRONTEND_DEPLOY_HOST }}" \
+            "chmod +x '${{ vars.FRONTEND_DEPLOY_PATH }}/scripts/deploy-next-blue-green.sh' && \
+             printf '%s' '${{ github.token }}' | docker login ghcr.io -u '${{ github.actor }}' --password-stdin && \
+             APP_NAME='${{ steps.image.outputs.repo }}' \
+             IMAGE='${{ steps.image.outputs.name }}' \
+             IMAGE_TAG='${{ steps.image.outputs.tag }}' \
+             PRIMARY_DOMAIN='${primary_domain}' \
+             DOMAINS='${{ vars.DASHBOARD_DOMAINS }}' \
+             ACME_EMAIL='${{ secrets.FRONTEND_ACME_EMAIL }}' \
+             BLUE_PORT='${{ vars.DASHBOARD_BLUE_PORT }}' \
+             GREEN_PORT='${{ vars.DASHBOARD_GREEN_PORT }}' \
+             HOST_NGINX_CONF='/etc/nginx/conf.d/${{ steps.image.outputs.repo }}.conf' \
+             '${{ vars.FRONTEND_DEPLOY_PATH }}/scripts/deploy-next-blue-green.sh'"
